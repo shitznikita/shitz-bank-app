@@ -13,3 +13,4 @@ val Pink40 = Color(0xFF7D5260)
 
 val HeaderGreen = Color(0xFF2AE881)
 val LightGreen = Color(0xFFD4FAE6)
+val AddButtonGreen = Color(0xFF2AE881)

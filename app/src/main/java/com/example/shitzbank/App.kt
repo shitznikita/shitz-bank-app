@@ -1,11 +1,12 @@
 package com.example.shitzbank
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -14,33 +15,34 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.shitzbank.data.navigation.Screen
-import com.example.shitzbank.expenses.ui.ExpensesScreen
+import com.example.shitzbank.domain.navigation.Screen
+import com.example.shitzbank.screen.expenses.ui.ExpensesScreen
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.example.shitzbank.articles.ui.ArticlesScreen
-import com.example.shitzbank.data.navigation.getScreen
-import com.example.shitzbank.incomes.ui.IncomesScreen
-import com.example.shitzbank.settings.ui.SettingsScreen
+import com.example.shitzbank.screen.articles.ui.ArticlesScreen
+import com.example.shitzbank.domain.navigation.getScreen
+import com.example.shitzbank.screen.incomes.ui.IncomesScreen
+import com.example.shitzbank.screen.settings.ui.SettingsScreen
+import com.example.shitzbank.ui.theme.AddButtonGreen
 import com.example.shitzbank.ui.theme.HeaderGreen
 import com.example.shitzbank.ui.theme.LightGreen
-import com.example.shitzbank.wallet.ui.WalletScreen
+import com.example.shitzbank.screen.wallet.ui.WalletScreen
+import com.example.shitzbank.screen.wallet.ui.WalletViewModel
 
 @Composable
-fun App() {
+fun App(viewModel: WalletViewModel = viewModel()) {
     val navController = rememberNavController()
 
     val screens = listOf(
@@ -53,16 +55,17 @@ fun App() {
 
     Scaffold(
         topBar = { AppTopBar(navController) },
-        bottomBar = { BottomNavigationBar(navController, screens) }
+        bottomBar = { AppBottomNavigationBar(navController, screens) },
+        floatingActionButton = { AppFloatingActionButton(navController) }
     ) { innerPadding ->
         NavHost(
             navController = navController,
             startDestination = Screen.Expenses.route,
             modifier = Modifier.padding(innerPadding)
         ) {
-            composable(Screen.Expenses.route) { ExpensesScreen() }
-            composable(Screen.Incomes.route) { IncomesScreen() }
-            composable(Screen.Wallet.route) { WalletScreen() }
+            composable(Screen.Expenses.route) { ExpensesScreen(viewModel) }
+            composable(Screen.Incomes.route) { IncomesScreen(viewModel) }
+            composable(Screen.Wallet.route) { WalletScreen(viewModel) }
             composable(Screen.Articles.route) { ArticlesScreen() }
             composable(Screen.Settings.route) { SettingsScreen() }
         }
@@ -80,27 +83,16 @@ fun AppTopBar(navController: NavController) {
     val title = currentScreen?.title() ?: stringResource(R.string.app_name)
     val action = currentScreen?.action()
 
-    TopAppBar(
+    CenterAlignedTopAppBar(
         colors = TopAppBarDefaults.topAppBarColors(
             containerColor = HeaderGreen,
             titleContentColor = Color.Black
         ),
         title = {
-            Box(
-                modifier = Modifier.fillMaxWidth(),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = title,
-                    textAlign = TextAlign.Center,
-                    style = MaterialTheme.typography.titleLarge
-                )
-            }
-        },
-        navigationIcon = {
-            if (action != null) {
-                Spacer(Modifier.size(48.dp))
-            }
+            Text(
+                text = title,
+                style = MaterialTheme.typography.titleLarge
+            )
         },
         actions = {
             if (action != null) {
@@ -116,7 +108,7 @@ fun AppTopBar(navController: NavController) {
 }
 
 @Composable
-fun BottomNavigationBar(
+fun AppBottomNavigationBar(
     navController: NavController,
     screens: List<Screen>
 ) {
@@ -149,8 +141,27 @@ fun BottomNavigationBar(
                     }
                 }
             )
-
         }
+    }
+}
 
+@Composable
+fun AppFloatingActionButton(navController: NavController) {
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentDestination = navBackStackEntry?.destination?.route
+
+    val currentScreen = getScreen(currentDestination)
+
+    val action = currentScreen?.action()
+
+    if (action != null) {
+        FloatingActionButton(
+            containerColor = AddButtonGreen,
+            contentColor = Color.White,
+            modifier = Modifier.clip(CircleShape),
+            onClick = {}
+        ) {
+            Icon(Icons.Default.Add, contentDescription = "Add")
+        }
     }
 }

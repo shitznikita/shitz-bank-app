@@ -1,4 +1,4 @@
-package com.example.shitzbank.data.navigation
+package com.example.shitzbank.domain.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.vector.ImageVector
