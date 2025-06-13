@@ -1,4 +1,4 @@
-package com.example.shitzbank.screen.wallet.ui
+package com.example.shitzbank.ui.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -6,12 +6,14 @@ import com.example.shitzbank.data.MockRepository
 import com.example.shitzbank.data.TransactionResponse
 import com.example.shitzbank.domain.ResultState
 import com.example.shitzbank.domain.model.Account
+import com.example.shitzbank.domain.model.Category
 import com.example.shitzbank.domain.model.Transaction
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
-class WalletViewModel : ViewModel() {
+class MainViewModel : ViewModel() {
+
     private val repository = MockRepository()
 
     private val _totalIncome = MutableStateFlow(0.0)
@@ -19,6 +21,9 @@ class WalletViewModel : ViewModel() {
 
     private val _totalExpense = MutableStateFlow(0.0)
     val totalExpense: StateFlow<Double> = _totalExpense
+
+    private val _categories = MutableStateFlow<ResultState<List<Category>>>(ResultState.Loading)
+    val categories: StateFlow<ResultState<List<Category>>> = _categories
 
     private val _accounts = MutableStateFlow<ResultState<List<Account>>>(ResultState.Loading)
     val accounts: StateFlow<ResultState<List<Account>>> = _accounts
@@ -30,11 +35,19 @@ class WalletViewModel : ViewModel() {
     val expenseTransactions: StateFlow<ResultState<List<Transaction>>> = _expenseTransactions
 
     init {
-        loadWallet()
+        loadInitialData()
     }
 
-    private fun loadWallet() {
+    private fun loadInitialData() {
         viewModelScope.launch {
+
+            try {
+                val loadedCategories = repository.getCategories()
+                _categories.value = ResultState.Success(loadedCategories)
+            } catch (e: Exception) {
+                _categories.value = ResultState.Error(e.message, e)
+            }
+
             try {
                 val loadedAccounts = repository.getAccounts()
                 _accounts.value = ResultState.Success(loadedAccounts)

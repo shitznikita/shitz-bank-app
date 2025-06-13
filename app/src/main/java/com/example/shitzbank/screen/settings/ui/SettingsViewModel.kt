@@ -7,6 +7,10 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
+data class SettingsState(
+    val items: List<SettingsItem> = emptyList()
+)
+
 class SettingsViewModel : ViewModel() {
     private val _settingsState = MutableStateFlow(SettingsState())
     val settingsState = _settingsState.asStateFlow()
@@ -45,7 +49,3 @@ class SettingsViewModel : ViewModel() {
         }
     }
 }
-
-data class SettingsState(
-    val items: List<SettingsItem> = emptyList()
-)

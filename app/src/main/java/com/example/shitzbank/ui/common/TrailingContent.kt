@@ -24,9 +24,7 @@ fun TrailingContent(
         icon?.let {
             Box(
                 contentAlignment = Alignment.Center,
-            ) {
-                it()
-            }
+            ) { it() }
         }
     }
 }

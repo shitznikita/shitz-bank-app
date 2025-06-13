@@ -3,12 +3,11 @@ package com.example.shitzbank.data
 import com.example.shitzbank.domain.model.Account
 import com.example.shitzbank.domain.model.Category
 import com.example.shitzbank.domain.repository.Repository
-import kotlinx.coroutines.delay
 import java.time.LocalDateTime
 
 class MockRepository : Repository {
 
-    val mockTransactions = listOf(
+    private val mockTransactions = listOf(
         TransactionResponse(
             id = 1,
             account = AccountBrief(
@@ -135,8 +134,6 @@ class MockRepository : Repository {
     )
 
     override suspend fun getAccounts(): List<Account> {
-        delay(5000)
-
         val shouldThrowError = (0..3).random() == 0
         if (shouldThrowError) {
             throw RuntimeException("error for testing states")

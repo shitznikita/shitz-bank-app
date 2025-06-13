@@ -24,14 +24,14 @@ import com.example.shitzbank.R
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.shitzbank.ui.common.CommonListItem
 import com.example.shitzbank.ui.common.LeadIcon
 import com.example.shitzbank.ui.common.ResultStateHandler
 import com.example.shitzbank.ui.theme.LightGreen
+import com.example.shitzbank.ui.viewmodel.MainViewModel
 
 @Composable
-fun ArticlesScreen(viewModel: ArticlesViewModel = viewModel()) {
+fun ArticlesScreen(viewModel: MainViewModel) {
     val mock by viewModel.categories.collectAsState()
 
     var searchQuery by remember { mutableStateOf("") }

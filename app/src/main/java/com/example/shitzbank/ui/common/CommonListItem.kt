@@ -12,6 +12,7 @@ fun CommonListItem(
     modifier: Modifier = Modifier,
     lead: (@Composable () -> Unit)? = null,
     content: @Composable () -> Unit,
+    supportingContent: (@Composable () -> Unit)? = null,
     trail: (@Composable () -> Unit)? = null,
     backgroundColor: Color = Color.White
 ) {
@@ -19,6 +20,7 @@ fun CommonListItem(
         modifier = modifier,
         leadingContent = lead,
         headlineContent = content,
+        supportingContent = supportingContent,
         trailingContent = trail,
         colors = ListItemDefaults.colors(backgroundColor)
     )
