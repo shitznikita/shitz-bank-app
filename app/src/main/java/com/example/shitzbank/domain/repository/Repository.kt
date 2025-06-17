@@ -1,6 +1,6 @@
 package com.example.shitzbank.domain.repository
 
-import com.example.shitzbank.data.TransactionResponse
+import com.example.shitzbank.domain.model.TransactionResponse
 import com.example.shitzbank.domain.model.Account
 import com.example.shitzbank.domain.model.Category
 

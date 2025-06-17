@@ -3,6 +3,7 @@ package com.example.shitzbank.ui.common
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.ListItemDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -14,7 +15,7 @@ fun CommonListItem(
     content: @Composable () -> Unit,
     supportingContent: (@Composable () -> Unit)? = null,
     trail: (@Composable () -> Unit)? = null,
-    backgroundColor: Color = Color.White
+    backgroundColor: Color = MaterialTheme.colorScheme.background
 ) {
     ListItem(
         modifier = modifier,

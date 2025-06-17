@@ -1,4 +1,4 @@
-package com.example.shitzbank.domain.navigation
+package com.example.shitzbank.ui.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -130,3 +130,11 @@ fun getScreen(route: String?): Screen? {
         else -> null
     }
 }
+
+val screens = listOf(
+    Screen.Expenses,
+    Screen.Incomes,
+    Screen.Wallet,
+    Screen.Articles,
+    Screen.Settings
+)

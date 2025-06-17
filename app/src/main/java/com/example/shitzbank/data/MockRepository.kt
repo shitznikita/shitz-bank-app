@@ -1,7 +1,9 @@
 package com.example.shitzbank.data
 
 import com.example.shitzbank.domain.model.Account
+import com.example.shitzbank.domain.model.AccountBrief
 import com.example.shitzbank.domain.model.Category
+import com.example.shitzbank.domain.model.TransactionResponse
 import com.example.shitzbank.domain.repository.Repository
 import java.time.LocalDateTime
 
@@ -134,22 +136,17 @@ class MockRepository : Repository {
     )
 
     override suspend fun getAccounts(): List<Account> {
-        val shouldThrowError = (0..3).random() == 0
-        if (shouldThrowError) {
-            throw RuntimeException("error for testing states")
-        } else {
-            return listOf(
-                Account(
-                    id = 1,
-                    userId = 1,
-                    name = "Основной счёт",
-                    balance = 100000.0,
-                    currency = "₽",
-                    createdAt = LocalDateTime.now().minusDays(10),
-                    updatedAt = LocalDateTime.now()
-                )
+        return listOf(
+            Account(
+                id = 1,
+                userId = 1,
+                name = "Основной счёт",
+                balance = 100000.0,
+                currency = "₽",
+                createdAt = LocalDateTime.now().minusDays(10),
+                updatedAt = LocalDateTime.now()
             )
-        }
+        )
     }
 
     override suspend fun getCategories(): List<Category> {

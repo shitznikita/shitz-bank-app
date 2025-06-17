@@ -3,8 +3,8 @@ package com.example.shitzbank.ui.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.shitzbank.data.MockRepository
-import com.example.shitzbank.data.TransactionResponse
-import com.example.shitzbank.domain.ResultState
+import com.example.shitzbank.domain.model.TransactionResponse
+import com.example.shitzbank.domain.repository.ResultState
 import com.example.shitzbank.domain.model.Account
 import com.example.shitzbank.domain.model.Category
 import com.example.shitzbank.domain.model.Transaction

@@ -11,7 +11,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
@@ -25,9 +24,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.unit.dp
 import com.example.shitzbank.ui.common.CommonListItem
+import com.example.shitzbank.ui.common.CommonText
 import com.example.shitzbank.ui.common.LeadIcon
 import com.example.shitzbank.ui.common.ResultStateHandler
-import com.example.shitzbank.ui.theme.LightGreen
 import com.example.shitzbank.ui.viewmodel.MainViewModel
 
 @Composable
@@ -53,10 +52,14 @@ fun ArticlesScreen(viewModel: MainViewModel) {
                 itemTemplate = { item ->
                     CommonListItem(
                         modifier = Modifier.height(70.dp),
-                        lead = { LeadIcon(label = item.icon, backgroundColor = LightGreen) },
+                        lead = { LeadIcon(label = item.icon, backgroundColor = MaterialTheme.colorScheme.secondary) },
                         content = {
                             Box {
-                                Text(item.title)
+                                CommonText(
+                                    text = item.title,
+                                    style = MaterialTheme.typography.bodyLarge,
+                                    color = MaterialTheme.colorScheme.onPrimary
+                                )
                             }
                         }
                     )
@@ -79,8 +82,10 @@ fun SearchInput(
         modifier = modifier,
         shape = RectangleShape,
         placeholder = {
-            Text(
-                stringResource(R.string.articles_find)
+            CommonText(
+                text = stringResource(R.string.articles_find),
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.onSecondary
             )
         },
         trailingIcon = {

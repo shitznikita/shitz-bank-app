@@ -4,7 +4,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -15,9 +14,9 @@ import androidx.compose.ui.res.vectorResource
 import com.example.shitzbank.ui.common.CommonLazyColumn
 import com.example.shitzbank.ui.common.CommonListItem
 import com.example.shitzbank.ui.common.ResultStateHandler
-import com.example.shitzbank.ui.theme.LightGreen
 import com.example.shitzbank.R
 import com.example.shitzbank.domain.model.Account
+import com.example.shitzbank.ui.common.CommonText
 import com.example.shitzbank.ui.common.LeadIcon
 import com.example.shitzbank.ui.common.PriceDisplay
 import com.example.shitzbank.ui.common.TrailingContent
@@ -45,7 +44,13 @@ fun WalletScreen(viewModel: MainViewModel) {
 fun BalanceWalletListItem(item: Account) {
     WalletListItem(
         lead = { LeadIcon(label = "💰") },
-        content = { Text(stringResource(R.string.balance)) },
+        content = {
+            CommonText(
+                text = stringResource(R.string.balance),
+                color = MaterialTheme.colorScheme.onPrimary,
+                style = MaterialTheme.typography.bodyLarge
+            )
+        },
         trail = {
             TrailingContent(
                 content = {
@@ -65,13 +70,20 @@ fun BalanceWalletListItem(item: Account) {
 @Composable
 fun CurrencyWalletListItem(item: Account) {
     WalletListItem(
-        content = { Text(stringResource(R.string.currency),) },
+        content = {
+            CommonText(
+                text = stringResource(R.string.currency),
+                color = MaterialTheme.colorScheme.onPrimary,
+                style = MaterialTheme.typography.bodyLarge
+            )
+        },
         trail = {
             TrailingContent(
                 content = {
-                    Text(
-                        item.currency,
-                        style = MaterialTheme.typography.bodyLarge
+                    CommonText(
+                        text = item.currency,
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = MaterialTheme.colorScheme.onPrimary
                     )
                 },
                 icon = {
@@ -89,11 +101,11 @@ fun WalletListItem(
     trail: (@Composable () -> Unit)
 ) {
     CommonListItem(
-        modifier = Modifier.background(LightGreen)
+        modifier = Modifier.background(MaterialTheme.colorScheme.secondary)
             .clickable {  },
         lead = lead,
         content = content,
         trail = trail,
-        backgroundColor = LightGreen
+        backgroundColor = MaterialTheme.colorScheme.secondary
     )
 }

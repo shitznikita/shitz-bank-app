@@ -1,10 +1,11 @@
 package com.example.shitzbank.screen.settings.ui
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.height
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -13,13 +14,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.shitzbank.R
 import com.example.shitzbank.screen.settings.domain.SettingsItem
 import com.example.shitzbank.screen.settings.domain.SettingsTitles
 import com.example.shitzbank.ui.common.CommonLazyColumn
 import com.example.shitzbank.ui.common.CommonListItem
-import com.example.shitzbank.ui.theme.AddButtonGreen
+import com.example.shitzbank.ui.common.CommonText
 
 @Composable
 fun SettingsScreen(viewModel: SettingsViewModel = viewModel()) {
@@ -66,8 +68,14 @@ fun SwitchableListItem(
     item: SettingsItem.SwitchSetting
 ) {
     CommonListItem(
-        modifier = Modifier,
-        content = { Text(item.title) },
+        modifier = Modifier.height(56.dp),
+        content = {
+            CommonText(
+                text = item.title,
+                color = MaterialTheme.colorScheme.onPrimary,
+                style = MaterialTheme.typography.bodyLarge
+            )
+        },
         trail = {
             Switch(
                 checked = item.isChecked,
@@ -75,7 +83,8 @@ fun SwitchableListItem(
                     viewModel.onSwitchChanged(item.id, newCheckedState)
                 },
                 colors = SwitchDefaults.colors(
-                    checkedTrackColor = AddButtonGreen
+                    checkedTrackColor = MaterialTheme.colorScheme.primary,
+                    checkedThumbColor = MaterialTheme.colorScheme.background
                 )
             )
         }
@@ -87,8 +96,14 @@ fun NavigationListItem(
     item: SettingsItem.NavigationSetting
 ) {
     CommonListItem(
-        modifier = Modifier.clickable {  },
-        content = { Text(item.title) },
+        modifier = Modifier.height(56.dp).clickable {  },
+        content = {
+            CommonText(
+                text = item.title,
+                color = MaterialTheme.colorScheme.onPrimary,
+                style = MaterialTheme.typography.bodyLarge
+            )
+        },
         trail = {
             Icon(
                 ImageVector.vectorResource(R.drawable.ic_chevron_right),

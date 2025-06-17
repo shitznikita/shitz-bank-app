@@ -1,6 +1,5 @@
-package com.example.shitzbank.data
+package com.example.shitzbank.domain.model
 
-import com.example.shitzbank.domain.model.Category
 import java.time.LocalDateTime
 
 data class AccountBrief(
