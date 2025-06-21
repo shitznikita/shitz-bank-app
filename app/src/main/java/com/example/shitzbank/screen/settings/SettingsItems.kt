@@ -1,4 +1,4 @@
-package com.example.shitzbank.screen.settings.domain
+package com.example.shitzbank.screen.settings
 
 sealed class SettingsItem {
     abstract val id: String

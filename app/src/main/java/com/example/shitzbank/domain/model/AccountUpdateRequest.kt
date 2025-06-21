@@ -1,4 +1,10 @@
 package com.example.shitzbank.domain.model
 
-class AccountUpdateRequest {
-}
+import kotlinx.serialization.Serializable
+
+@Serializable
+data class AccountUpdateRequest(
+    val name: String,
+    val balance: Double,
+    val currency: String
+)

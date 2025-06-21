@@ -1,4 +1,4 @@
-package com.example.shitzbank.common.function
+package com.example.shitzbank.common.utils
 
 fun getCurrencySymbol(currency: String): String {
     return when (currency.uppercase()) {

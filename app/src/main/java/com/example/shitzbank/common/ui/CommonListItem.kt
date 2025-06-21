@@ -1,4 +1,4 @@
-package com.example.shitzbank.ui.common
+package com.example.shitzbank.common.ui
 
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.ListItem

@@ -1,4 +1,4 @@
-package com.example.shitzbank.ui.common
+package com.example.shitzbank.common.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box

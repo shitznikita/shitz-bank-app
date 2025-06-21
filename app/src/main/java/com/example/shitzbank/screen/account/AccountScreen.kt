@@ -1,39 +1,47 @@
-package com.example.shitzbank.screen.wallet.ui
+package com.example.shitzbank.screen.account
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.shitzbank.common.ui.CommonLazyColumn
 import com.example.shitzbank.common.ui.CommonListItem
 import com.example.shitzbank.common.ui.ResultStateHandler
 import com.example.shitzbank.R
+import com.example.shitzbank.common.utils.getCurrencySymbol
 import com.example.shitzbank.domain.model.Account
 import com.example.shitzbank.common.ui.CommonText
 import com.example.shitzbank.common.ui.LeadIcon
 import com.example.shitzbank.common.ui.PriceDisplay
 import com.example.shitzbank.common.ui.TrailingContent
-import com.example.shitzbank.ui.viewmodel.MainViewModel
 
 @Composable
-fun WalletScreen(viewModel: MainViewModel) {
-    val mock by viewModel.accounts.collectAsState()
+fun AccountScreen(
+    viewModel: AccountViewModel = hiltViewModel()
+) {
+    val state by viewModel.accountState.collectAsState()
+
+    LaunchedEffect(Unit) {
+        viewModel.loadAccount()
+    }
 
     ResultStateHandler(
-        state = mock,
+        state = state,
         onSuccess = { data ->
             CommonLazyColumn(
-                itemsList = data,
+                itemsList = listOf(data),
                 itemTemplate = { item ->
-                    BalanceWalletListItem(item)
-                    CurrencyWalletListItem(item)
+                    BalanceAccountListItem(item)
+                    CurrencyAccountListItem(item)
                 }
             )
         }
@@ -41,8 +49,8 @@ fun WalletScreen(viewModel: MainViewModel) {
 }
 
 @Composable
-fun BalanceWalletListItem(item: Account) {
-    WalletListItem(
+fun BalanceAccountListItem(item: Account) {
+    AccountListItem(
         lead = { LeadIcon(label = "💰") },
         content = {
             CommonText(
@@ -56,7 +64,7 @@ fun BalanceWalletListItem(item: Account) {
                 content = {
                     PriceDisplay(
                         amount = item.balance,
-                        currencySymbol = item.currency
+                        currency = item.currency
                     )
                 },
                 icon = {
@@ -68,8 +76,8 @@ fun BalanceWalletListItem(item: Account) {
 }
 
 @Composable
-fun CurrencyWalletListItem(item: Account) {
-    WalletListItem(
+fun CurrencyAccountListItem(item: Account) {
+    AccountListItem(
         content = {
             CommonText(
                 text = stringResource(R.string.currency),
@@ -81,7 +89,7 @@ fun CurrencyWalletListItem(item: Account) {
             TrailingContent(
                 content = {
                     CommonText(
-                        text = item.currency,
+                        text = getCurrencySymbol(item.currency),
                         style = MaterialTheme.typography.bodyLarge,
                         color = MaterialTheme.colorScheme.onPrimary
                     )
@@ -95,7 +103,7 @@ fun CurrencyWalletListItem(item: Account) {
 }
 
 @Composable
-fun WalletListItem(
+fun AccountListItem(
     lead: (@Composable () -> Unit)? = null,
     content: @Composable () -> Unit,
     trail: (@Composable () -> Unit)

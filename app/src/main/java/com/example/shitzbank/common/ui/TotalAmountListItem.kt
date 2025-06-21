@@ -1,4 +1,4 @@
-package com.example.shitzbank.ui.common
+package com.example.shitzbank.common.ui
 
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -21,7 +21,7 @@ fun TotalAmountListItem(
         trail = {
             PriceDisplay(
                 amount = totalAmount,
-                currencySymbol = "₽"
+                currency = "₽"
             )
         }
     )

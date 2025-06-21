@@ -1,4 +1,4 @@
-package com.example.shitzbank.screen.expenses.ui
+package com.example.shitzbank.screen.expenses
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.height
@@ -23,7 +23,7 @@ fun ExpensesScreen(
     viewModel: ExpensesViewModel = hiltViewModel()
 ) {
     val state by viewModel.expensesState.collectAsState()
-    val totalAmount by viewModel.totalExpense.collectAsState()
+    val totalExpense by viewModel.totalExpense.collectAsState()
 
     LaunchedEffect(Unit) {
         viewModel.loadExpenses()
@@ -34,7 +34,7 @@ fun ExpensesScreen(
         onSuccess = { data ->
             CommonLazyColumn(
                 topItem = {
-                    TotalAmountListItem(totalAmount)
+                    TotalAmountListItem(totalExpense)
                 },
                 itemsList = data,
                 itemTemplate = { item ->

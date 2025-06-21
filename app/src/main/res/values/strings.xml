@@ -1,5 +1,12 @@
 <resources>
     <string name="app_name">shitzbank</string>
+
+    <string name="expenses_route">expenses</string>
+    <string name="incomes_route">incomes</string>
+    <string name="account_route">account</string>
+    <string name="categories_route">categories</string>
+    <string name="settings_route">settings</string>
+    <string name="expenses_history_route">expenses_history</string>
     
     <string name="expenses_header">Расходы сегодня</string>
     <string name="expenses_icon">Расходы</string>
@@ -11,6 +18,7 @@
     <string name="articles_icon">Статьи</string>
     <string name="settings_header">Настройки</string>
     <string name="settings_icon">Настройки</string>
+    <string name="expenses_history_header">Моя история</string>
 
     <string name="settings_dark_theme">Тёмная тема</string>
     <string name="settings_main_color">Основной цвет</string>
@@ -22,9 +30,7 @@
     <string name="settings_about_app">О программе</string>
 
     <string name="articles_find">Найти статью</string>
-    
     <string name="in_total">Всего</string>
     <string name="balance">Баланс</string>
     <string name="currency">Валюта</string>
-    <string name="rubles">₽</string>
 </resources>

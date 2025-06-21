@@ -1,4 +1,4 @@
-package com.example.shitzbank.domain.repository
+package com.example.shitzbank.common
 
 sealed class ResultState<out T> {
     data class Success<out T>(val data: T) : ResultState<T>()

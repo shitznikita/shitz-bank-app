@@ -1,4 +1,4 @@
-package com.example.shitzbank.screen.settings.ui
+package com.example.shitzbank.screen.settings
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.height
@@ -17,8 +17,6 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.shitzbank.R
-import com.example.shitzbank.screen.settings.domain.SettingsItem
-import com.example.shitzbank.screen.settings.domain.SettingsTitles
 import com.example.shitzbank.common.ui.CommonLazyColumn
 import com.example.shitzbank.common.ui.CommonListItem
 import com.example.shitzbank.common.ui.CommonText

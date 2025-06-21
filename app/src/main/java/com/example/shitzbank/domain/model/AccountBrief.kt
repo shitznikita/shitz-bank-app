@@ -1,4 +1,11 @@
 package com.example.shitzbank.domain.model
 
-class AccountBrief {
-}
+import kotlinx.serialization.Serializable
+
+@Serializable
+data class AccountBrief(
+    val id: Int,
+    val name: String,
+    val balance: Double,
+    val currency: String
+)

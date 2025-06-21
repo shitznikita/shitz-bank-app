@@ -1,4 +1,4 @@
-package com.example.shitzbank.screen.articles.ui
+package com.example.shitzbank.screen.categories
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -12,6 +12,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -23,20 +24,26 @@ import com.example.shitzbank.R
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.shitzbank.common.ui.CommonListItem
 import com.example.shitzbank.common.ui.CommonText
 import com.example.shitzbank.common.ui.LeadIcon
 import com.example.shitzbank.common.ui.ResultStateHandler
-import com.example.shitzbank.ui.viewmodel.MainViewModel
 
 @Composable
-fun ArticlesScreen(viewModel: MainViewModel) {
-    val mock by viewModel.categories.collectAsState()
+fun CategoriesScreen(
+    viewModel: CategoriesViewModel = hiltViewModel()
+) {
+    val state by viewModel.categoriesState.collectAsState()
 
     var searchQuery by remember { mutableStateOf("") }
 
+    LaunchedEffect(Unit) {
+        viewModel.loadCategories()
+    }
+
     ResultStateHandler(
-        state = mock,
+        state = state,
         onSuccess = { data ->
             CommonLazyColumn(
                 topItem = {
@@ -52,11 +59,11 @@ fun ArticlesScreen(viewModel: MainViewModel) {
                 itemTemplate = { item ->
                     CommonListItem(
                         modifier = Modifier.height(70.dp),
-                        lead = { LeadIcon(label = item.icon, backgroundColor = MaterialTheme.colorScheme.secondary) },
+                        lead = { LeadIcon(label = item.emoji, backgroundColor = MaterialTheme.colorScheme.secondary) },
                         content = {
                             Box {
                                 CommonText(
-                                    text = item.title,
+                                    text = item.name,
                                     style = MaterialTheme.typography.bodyLarge,
                                     color = MaterialTheme.colorScheme.onPrimary
                                 )

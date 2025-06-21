@@ -1,4 +1,7 @@
 package com.example.shitzbank
 
-class ShmrFinanceApp {
-}
+import android.app.Application
+import dagger.hilt.android.HiltAndroidApp
+
+@HiltAndroidApp
+class ShmrFinanceApp : Application()
