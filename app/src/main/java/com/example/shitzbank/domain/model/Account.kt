@@ -1,13 +1,14 @@
 package com.example.shitzbank.domain.model
 
-import java.time.LocalDateTime
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class Account(
     val id: Int,
     val userId: Int,
     val name: String,
     val balance: Double,
     val currency: String,
-    val createdAt: LocalDateTime,
-    val updatedAt: LocalDateTime
+    val createdAt: String,
+    val updatedAt: String
 )
