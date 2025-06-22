@@ -34,39 +34,42 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.NavType
+import androidx.navigation.navArgument
 import com.example.shitzbank.common.network.ConnectionStatus
 import com.example.shitzbank.navigation.getScreen
 import com.example.shitzbank.screen.incomes.IncomesScreen
 import com.example.shitzbank.screen.settings.SettingsScreen
 import com.example.shitzbank.common.ui.CommonText
+import com.example.shitzbank.navigation.currentRouteAsState
 import com.example.shitzbank.navigation.screens
 import com.example.shitzbank.screen.account.AccountScreen
 import com.example.shitzbank.screen.categories.CategoriesScreen
-import com.example.shitzbank.screen.expenses.history.ExpensesHistoryScreen
+import com.example.shitzbank.screen.history.TransactionsHistoryScreen
 
 @Composable
 fun App(
     viewModel: AppViewModel = hiltViewModel()
 ) {
     val navController = rememberNavController()
-    val snackbarHostState = remember { SnackbarHostState() }
+    val hostState = remember { SnackbarHostState() }
 
     val networkStatus by viewModel.networkStatus.collectAsState()
+    val networkLostMessage = stringResource(R.string.no_internet)
 
     LaunchedEffect(networkStatus) {
         if (networkStatus is ConnectionStatus.Unavailable) {
-            snackbarHostState.showSnackbar(
-                message = "Отсутствует подключение к интернету",
+            hostState.showSnackbar(
+                message = networkLostMessage,
                 duration = SnackbarDuration.Indefinite
             )
         } else {
-            snackbarHostState.currentSnackbarData?.dismiss()
+            hostState.currentSnackbarData?.dismiss()
         }
     }
 
     Scaffold(
-        snackbarHost = { SnackbarHost(snackbarHostState) },
+        snackbarHost = { SnackbarHost(hostState) },
         topBar = { AppTopBar(navController) },
         bottomBar = { AppBottomNavigationBar(navController) },
         floatingActionButton = { AppFloatingActionButton(navController) }
@@ -81,7 +84,10 @@ fun App(
             composable("account") { AccountScreen() }
             composable("categories") { CategoriesScreen() }
             composable("settings") { SettingsScreen() }
-            composable("expenses_history") { ExpensesHistoryScreen() }
+            composable(
+                route = "history/{isIncome}",
+                arguments = listOf(navArgument("isIncome") { type = NavType.BoolType })
+            ) { TransactionsHistoryScreen() }
         }
     }
 }
@@ -89,8 +95,7 @@ fun App(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AppTopBar(navController: NavController) {
-    val navBackStackEntry by navController.currentBackStackEntryAsState()
-    val currentDestination = navBackStackEntry?.destination?.route ?: stringResource(Screen.Expenses.routeResId)
+    val currentDestination = navController.currentRouteAsState()
 
     val currentScreen = getScreen(currentDestination)
 
@@ -133,8 +138,7 @@ fun AppTopBar(navController: NavController) {
 
 @Composable
 fun AppBottomNavigationBar(navController: NavController) {
-    val navBackStackEntry by navController.currentBackStackEntryAsState()
-    val currentDestination = navBackStackEntry?.destination?.route ?: stringResource(Screen.Expenses.routeResId)
+    val currentDestination = navController.currentRouteAsState()
 
     BottomAppBar {
         screens.forEach { screen ->
@@ -183,8 +187,7 @@ fun AppBottomNavigationBar(navController: NavController) {
 
 @Composable
 fun AppFloatingActionButton(navController: NavController) {
-    val navBackStackEntry by navController.currentBackStackEntryAsState()
-    val currentDestination = navBackStackEntry?.destination?.route ?: stringResource(Screen.Expenses.routeResId)
+    val currentDestination = navController.currentRouteAsState()
 
     val currentScreen = getScreen(currentDestination)
 
@@ -204,8 +207,7 @@ fun AppFloatingActionButton(navController: NavController) {
 
 @Composable
 fun AppNavigationIcon(navController: NavController) {
-    val navBackStackEntry by navController.currentBackStackEntryAsState()
-    val currentDestination = navBackStackEntry?.destination?.route ?: stringResource(Screen.Expenses.routeResId)
+    val currentDestination = navController.currentRouteAsState()
 
     val currentScreen = getScreen(currentDestination)
 

@@ -59,7 +59,7 @@ sealed class ActionIcon(
 
     data object IncomesAction : ActionIcon(
         iconResId = R.drawable.ic_history,
-        routeResId = R.string.expenses_route
+        routeResId = R.string.incomes_history_route
     )
 
     data object AccountAction : ActionIcon(
@@ -70,6 +70,11 @@ sealed class ActionIcon(
     data object ExpensesHistoryAction : ActionIcon(
         iconResId = R.drawable.ic_transaction_history,
         routeResId = R.string.expenses_history_route
+    )
+
+    data object IncomesHistoryAction : ActionIcon(
+        iconResId = R.drawable.ic_transaction_history,
+        routeResId = R.string.incomes_history_route
     )
 }
 
@@ -86,6 +91,11 @@ sealed class BackNavigationIcon(
     data object ExpensesHistoryBack : BackNavigationIcon(
         iconResId = R.drawable.ic_back,
         routeResId = R.string.expenses_route
+    )
+
+    data object IncomesHistoryBack : BackNavigationIcon(
+        iconResId = R.drawable.ic_back,
+        routeResId = R.string.incomes_route
     )
 }
 
@@ -115,7 +125,8 @@ sealed class Screen(
         routeResId = R.string.incomes_route,
         titleResId = R.string.incomes_header,
         action = ActionIcon.IncomesAction,
-        bottomNavigationIcon = BottomNavigationIcon.IncomesIcon
+        bottomNavigationIcon = BottomNavigationIcon.IncomesIcon,
+        relatedRoutesResIds = listOf(R.string.incomes_history_route)
     )
 
     data object Account : Screen(
@@ -137,11 +148,18 @@ sealed class Screen(
         bottomNavigationIcon = BottomNavigationIcon.SettingsIcon
     )
 
-    data object ExpesesHistory : Screen(
+    data object ExpensesHistory : Screen(
         routeResId = R.string.expenses_history_route,
-        titleResId = R.string.expenses_history_header,
+        titleResId = R.string.history_header,
         action = ActionIcon.ExpensesHistoryAction,
         backNavigationIcon = BackNavigationIcon.ExpensesHistoryBack
+    )
+
+    data object IncomesHistory : Screen(
+        routeResId = R.string.incomes_history_route,
+        titleResId = R.string.history_header,
+        action = ActionIcon.IncomesHistoryAction,
+        backNavigationIcon = BackNavigationIcon.IncomesHistoryBack
     )
 }
 
@@ -152,7 +170,8 @@ fun getScreen(route: String): Screen {
         "account" -> Screen.Account
         "categories" -> Screen.Categories
         "settings" -> Screen.Settings
-        "expenses_history" -> Screen.ExpesesHistory
+        "history/false" -> Screen.ExpensesHistory
+        "history/true" -> Screen.IncomesHistory
         else -> Screen.Expenses
     }
 }

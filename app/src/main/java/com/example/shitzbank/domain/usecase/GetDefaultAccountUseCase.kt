@@ -1,5 +1,6 @@
 package com.example.shitzbank.domain.usecase
 
+import com.example.shitzbank.common.network.retryWithBackoff
 import com.example.shitzbank.domain.model.Account
 import com.example.shitzbank.domain.repository.AccountRepository
 import javax.inject.Inject
@@ -9,12 +10,9 @@ class GetDefaultAccountUseCase @Inject constructor(
 ) {
 
     suspend fun execute(): Account? {
-        return try {
-            val accounts = accountRepository.getAccounts()
+        val accounts = accountRepository.getAccounts()
+        return retryWithBackoff {
             accounts.firstOrNull()
-        } catch (e: Exception) {
-            e.printStackTrace()
-            null
         }
     }
 

@@ -53,12 +53,9 @@ class IncomesViewModel @Inject constructor(
             _totalIncome.value = 0.0
 
             try {
-                val today = LocalDate.now()
-                val startOfMonth = today.withDayOfMonth(1)
-
                 val apiFormatter = DateTimeFormatter.ISO_LOCAL_DATE
-                val startDateString = startOfMonth.atStartOfDay().format(apiFormatter)
-                val endDateString = today.format(apiFormatter)
+                val startDateString = LocalDate.now().format(apiFormatter)
+                val endDateString = LocalDate.now().format(apiFormatter)
 
                 val accountId = getDefaultAccountIdUseCase.execute()
 

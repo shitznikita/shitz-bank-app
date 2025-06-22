@@ -1,5 +1,6 @@
-package com.example.shitzbank.screen.expenses.history
+package com.example.shitzbank.screen.history
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.shitzbank.common.ResultState
@@ -7,43 +8,50 @@ import com.example.shitzbank.common.network.ConnectionStatus
 import com.example.shitzbank.common.network.NetworkMonitor
 import com.example.shitzbank.domain.model.TransactionResponse
 import com.example.shitzbank.domain.usecase.GetDefaultAccountIdUseCase
-import com.example.shitzbank.domain.usecase.GetExpensesUseCase
+import com.example.shitzbank.domain.usecase.GetTransactionsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
 @HiltViewModel
-class ExpensesHistoryViewModel @Inject constructor(
+class TransactionsHistoryViewModel @Inject constructor(
+    private val savedStateHandle: SavedStateHandle,
     private val getDefaultAccountIdUseCase: GetDefaultAccountIdUseCase,
-    private val getExpensesUseCase: GetExpensesUseCase,
+    private val getTransactionsUseCase: GetTransactionsUseCase,
     private val networkMonitor: NetworkMonitor
 ) : ViewModel() {
+    private val isIncome: Boolean = savedStateHandle.get<Boolean>("isIncome") ?: false
+
     private val _startDate = MutableStateFlow(LocalDate.now().withDayOfMonth(1))
     val startDate: StateFlow<LocalDate> = _startDate.asStateFlow()
 
     private val _endDate = MutableStateFlow(LocalDate.now())
     val endDate: StateFlow<LocalDate> = _endDate.asStateFlow()
 
-    private val _expensesState = MutableStateFlow<ResultState<List<TransactionResponse>>>(ResultState.Loading)
-    val expensesState: StateFlow<ResultState<List<TransactionResponse>>> = _expensesState.asStateFlow()
+    private val _transactionsState = MutableStateFlow<ResultState<List<TransactionResponse>>>(ResultState.Loading)
+    val transactionsState: StateFlow<ResultState<List<TransactionResponse>>> = _transactionsState.asStateFlow()
 
-    private val _totalExpense = MutableStateFlow(0.0)
-    val totalExpense: StateFlow<Double> = _totalExpense.asStateFlow()
+    private val _total = MutableStateFlow(0.0)
+    val total = _total.asStateFlow()
 
     private val _networkStatus = MutableStateFlow<ConnectionStatus>(ConnectionStatus.Unavailable)
     val networkStatus: StateFlow<ConnectionStatus> = _networkStatus.asStateFlow()
+
+    private val _dateError = MutableStateFlow<String?>(null)
+    val dateError: StateFlow<String?> = _dateError.asStateFlow()
 
     init {
         viewModelScope.launch {
             networkMonitor.connectionStatus.collect { status ->
                 _networkStatus.value = status
                 if (status is ConnectionStatus.Available) {
-                    loadExpenses()
+                    loadTransactions()
                 }
             }
         }
@@ -51,23 +59,22 @@ class ExpensesHistoryViewModel @Inject constructor(
 
     fun setStartDate(date: LocalDate) {
         _startDate.value = date
-        loadExpenses()
+        loadTransactions()
     }
 
     fun setEndDate(date: LocalDate) {
         _endDate.value = date
-        loadExpenses()
+        loadTransactions()
     }
 
-    private fun loadExpenses() {
+    private fun loadTransactions() {
         viewModelScope.launch {
             if (_networkStatus.value is ConnectionStatus.Unavailable) {
-                _expensesState.value = ResultState.Loading
                 return@launch
             }
 
-            _expensesState.value = ResultState.Loading
-            _totalExpense.value = 0.0
+            _transactionsState.value = ResultState.Loading
+            _total.value = 0.0
 
             try {
                 val accountId = getDefaultAccountIdUseCase.execute()
@@ -76,22 +83,25 @@ class ExpensesHistoryViewModel @Inject constructor(
                 val start = _startDate.value.format(apiFormatter)
                 val end = _endDate.value.format(apiFormatter)
 
-                val expenses = getExpensesUseCase.execute(accountId!!, start, end)
-                _expensesState.value = ResultState.Success(expenses)
+                val transactions = getTransactionsUseCase.execute(accountId!!, start, end).filter {
+                    it.category.isIncome == isIncome
+                }
+                _transactionsState.value = ResultState.Success(transactions)
 
-                if (expenses.isEmpty()) {
-                    _totalExpense.value = 0.0
+                if (transactions.isEmpty()) {
+                    _total.value = 0.0
                 } else {
-                    calculateTotalExpense(expenses)
+                    calculateTotalExpense(transactions)
                 }
             } catch (e: Exception) {
-                _expensesState.value = ResultState.Error("Error: ${e.message}")
+                _transactionsState.value = ResultState.Error("Error: ${e.message}")
             }
         }
     }
 
     private fun calculateTotalExpense(expenses: List<TransactionResponse>) {
         val sum = expenses.sumOf { it.amount }
-        _totalExpense.value = sum
+        _total.value = sum
     }
+
 }

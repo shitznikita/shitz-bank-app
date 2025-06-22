@@ -3,7 +3,6 @@ package com.example.shitzbank.data.di
 import android.content.Context
 import com.example.shitzbank.common.network.NetworkMonitor
 import com.example.shitzbank.data.network.AuthInterceptor
-import com.example.shitzbank.data.network.RetryInterceptor
 import com.example.shitzbank.data.network.ShmrFinanceApi
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Module
@@ -36,7 +35,6 @@ object NetworkModule {
         return OkHttpClient.Builder()
             .addInterceptor(loggingInterceptor)
             .addInterceptor(authInterceptor)
-            .addInterceptor(RetryInterceptor())
             .connectTimeout(30, TimeUnit.SECONDS)
             .readTimeout(30, TimeUnit.SECONDS)
             .writeTimeout(30, TimeUnit.SECONDS)

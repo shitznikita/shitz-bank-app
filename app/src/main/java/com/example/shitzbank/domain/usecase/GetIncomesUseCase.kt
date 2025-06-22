@@ -1,5 +1,6 @@
 package com.example.shitzbank.domain.usecase
 
+import com.example.shitzbank.common.network.retryWithBackoff
 import com.example.shitzbank.domain.model.TransactionResponse
 import com.example.shitzbank.domain.repository.TransactionRepository
 import javax.inject.Inject
@@ -14,7 +15,9 @@ class GetIncomesUseCase @Inject constructor(
         endDate: String
     ): List<TransactionResponse> {
         val allTransactions = transactionRepository.getTransactionsForPeriod(accountId, startDate, endDate)
-        return allTransactions.filter { it.category.isIncome }
+        return retryWithBackoff {
+            allTransactions.filter { it.category.isIncome }.reversed()
+        }
     }
 
 }

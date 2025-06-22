@@ -5,7 +5,7 @@ import com.example.shitzbank.domain.model.TransactionResponse
 import com.example.shitzbank.domain.repository.TransactionRepository
 import javax.inject.Inject
 
-class GetExpensesUseCase @Inject constructor(
+class GetTransactionsUseCase @Inject constructor(
     private val transactionRepository: TransactionRepository
 ) {
 
@@ -14,9 +14,8 @@ class GetExpensesUseCase @Inject constructor(
         startDate: String,
         endDate: String
     ): List<TransactionResponse> {
-        val allTransactions = transactionRepository.getTransactionsForPeriod(accountId, startDate, endDate)
         return retryWithBackoff {
-            allTransactions.filter { !it.category.isIncome }.reversed()
+            transactionRepository.getTransactionsForPeriod(accountId, startDate, endDate).reversed()
         }
     }
 

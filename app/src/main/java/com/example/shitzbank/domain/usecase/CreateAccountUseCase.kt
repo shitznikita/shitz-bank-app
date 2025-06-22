@@ -1,5 +1,6 @@
 package com.example.shitzbank.domain.usecase
 
+import com.example.shitzbank.common.network.retryWithBackoff
 import com.example.shitzbank.domain.model.Account
 import com.example.shitzbank.domain.model.AccountCreateRequest
 import com.example.shitzbank.domain.repository.AccountRepository
@@ -15,7 +16,9 @@ class CreateAccountUseCase @Inject constructor(
         currency: String
     ): Account {
         val request = AccountCreateRequest(name, balance, currency)
-        return accountRepository.createAccount(request)
+        return retryWithBackoff {
+            accountRepository.createAccount(request)
+        }
     }
 
 }
