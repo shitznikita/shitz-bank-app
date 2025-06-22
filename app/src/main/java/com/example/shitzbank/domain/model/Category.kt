@@ -1,8 +1,11 @@
 package com.example.shitzbank.domain.model
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class Category(
     val id: Int,
-    val title: String,
-    val icon: String,
+    val name: String,
+    val emoji: String,
     val isIncome: Boolean
 )
