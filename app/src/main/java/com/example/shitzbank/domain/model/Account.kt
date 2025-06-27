@@ -1,14 +1,24 @@
 package com.example.shitzbank.domain.model
 
-import kotlinx.serialization.Serializable
+import java.time.LocalDateTime
 
-@Serializable
+/**
+ * Модель данных, представляющая банковский счет пользователя.
+ *
+ * @property id Уникальный идентификатор счета.
+ * @property userId Идентификатор пользователя, которому принадлежит счет.
+ * @property name Название счета (например, "Основной счет", "Сберегательный счет").
+ * @property balance Текущий баланс счета.
+ * @property currency Валюта счета (например, "USD", "EUR", "RUB").
+ * @property createdAt Дата и время создания счета.
+ * @property updatedAt Дата и время последнего обновления счета.
+ */
 data class Account(
     val id: Int,
     val userId: Int,
     val name: String,
     val balance: Double,
     val currency: String,
-    val createdAt: String,
-    val updatedAt: String
+    val createdAt: LocalDateTime,
+    val updatedAt: LocalDateTime,
 )

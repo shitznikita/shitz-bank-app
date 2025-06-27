@@ -20,48 +20,46 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.ui.Modifier
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
-import com.example.shitzbank.navigation.Screen
-import com.example.shitzbank.screen.expenses.ExpensesScreen
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.NavType
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.shitzbank.common.network.ConnectionStatus
-import com.example.shitzbank.navigation.getScreen
-import com.example.shitzbank.screen.incomes.IncomesScreen
-import com.example.shitzbank.screen.settings.SettingsScreen
-import com.example.shitzbank.common.ui.CommonText
-import com.example.shitzbank.navigation.currentRouteAsState
-import com.example.shitzbank.navigation.screens
-import com.example.shitzbank.screen.account.AccountScreen
-import com.example.shitzbank.screen.categories.CategoriesScreen
-import com.example.shitzbank.screen.history.TransactionsHistoryScreen
+import com.example.shitzbank.ui.common.CommonText
+import com.example.shitzbank.ui.navigation.Screen
+import com.example.shitzbank.ui.navigation.currentRouteAsState
+import com.example.shitzbank.ui.navigation.getScreen
+import com.example.shitzbank.ui.navigation.screens
+import com.example.shitzbank.ui.screen.account.AccountScreen
+import com.example.shitzbank.ui.screen.categories.CategoriesScreen
+import com.example.shitzbank.ui.screen.expenses.ExpensesScreen
+import com.example.shitzbank.ui.screen.history.TransactionsHistoryScreen
+import com.example.shitzbank.ui.screen.incomes.IncomesScreen
+import com.example.shitzbank.ui.screen.settings.SettingsScreen
 
 @Composable
-fun App(
-    viewModel: AppViewModel = hiltViewModel()
-) {
+fun App(viewModel: AppViewModel = hiltViewModel()) {
     val navController = rememberNavController()
     val hostState = remember { SnackbarHostState() }
 
-    val networkStatus by viewModel.networkStatus.collectAsState()
+    val networkStatus by viewModel.networkStatus.collectAsStateWithLifecycle()
     val networkLostMessage = stringResource(R.string.no_internet)
 
     LaunchedEffect(networkStatus) {
         if (networkStatus is ConnectionStatus.Unavailable) {
             hostState.showSnackbar(
                 message = networkLostMessage,
-                duration = SnackbarDuration.Indefinite
+                duration = SnackbarDuration.Indefinite,
             )
         } else {
             hostState.currentSnackbarData?.dismiss()
@@ -72,21 +70,27 @@ fun App(
         snackbarHost = { SnackbarHost(hostState) },
         topBar = { AppTopBar(navController) },
         bottomBar = { AppBottomNavigationBar(navController) },
-        floatingActionButton = { AppFloatingActionButton(navController) }
+        floatingActionButton = { AppFloatingActionButton(navController) },
     ) { innerPadding ->
+        val expensesRoute = Screen.Expenses.getRoute()
+        val incomesRoute = Screen.Incomes.getRoute()
+        val accountRoute = Screen.Account.getRoute()
+        val categoriesRoute = Screen.Categories.getRoute()
+        val settingsRoute = Screen.Settings.getRoute()
+
         NavHost(
             navController = navController,
             startDestination = stringResource(Screen.Expenses.routeResId),
-            modifier = Modifier.padding(innerPadding)
+            modifier = Modifier.padding(innerPadding),
         ) {
-            composable("expenses") { ExpensesScreen() }
-            composable("incomes") { IncomesScreen() }
-            composable("account") { AccountScreen() }
-            composable("categories") { CategoriesScreen() }
-            composable("settings") { SettingsScreen() }
+            composable(expensesRoute) { ExpensesScreen() }
+            composable(incomesRoute) { IncomesScreen() }
+            composable(accountRoute) { AccountScreen() }
+            composable(categoriesRoute) { CategoriesScreen() }
+            composable(settingsRoute) { SettingsScreen() }
             composable(
                 route = "history/{isIncome}",
-                arguments = listOf(navArgument("isIncome") { type = NavType.BoolType })
+                arguments = listOf(navArgument("isIncome") { type = NavType.BoolType }),
             ) { TransactionsHistoryScreen() }
         }
     }
@@ -104,15 +108,16 @@ fun AppTopBar(navController: NavController) {
     val backNavigation = currentScreen.backNavigationIcon
 
     CenterAlignedTopAppBar(
-        colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = MaterialTheme.colorScheme.primary,
-            titleContentColor = MaterialTheme.colorScheme.onPrimary
-        ),
+        colors =
+            TopAppBarDefaults.topAppBarColors(
+                containerColor = MaterialTheme.colorScheme.primary,
+                titleContentColor = MaterialTheme.colorScheme.onPrimary,
+            ),
         title = {
             CommonText(
                 text = title,
                 color = MaterialTheme.colorScheme.onPrimary,
-                style = MaterialTheme.typography.titleLarge
+                style = MaterialTheme.typography.titleLarge,
             )
         },
         navigationIcon = {
@@ -128,11 +133,11 @@ fun AppTopBar(navController: NavController) {
                 IconButton(onClick = { navController.navigate(actionRoute) }) {
                     Icon(
                         imageVector = actionIcon,
-                        contentDescription = title
+                        contentDescription = title,
                     )
                 }
             }
-        }
+        },
     )
 }
 
@@ -147,7 +152,12 @@ fun AppBottomNavigationBar(navController: NavController) {
             val bottomNavigationIcon = screen.bottomNavigationIcon!!.getIcon()
             val bottomNavigationLabel = screen.bottomNavigationIcon.getLabel()
 
-            val relatedRoutes = screen.relatedRoutesResIds.map { stringResource(it) }
+            val stringResourcesForRelatedRoutes = screen.relatedRoutesResIds.map { stringResource(it) }
+
+            val relatedRoutes =
+                remember(stringResourcesForRelatedRoutes) {
+                    stringResourcesForRelatedRoutes
+                }
 
             val isSelected = currentDestination == screenRoute || relatedRoutes.contains(currentDestination)
 
@@ -157,8 +167,11 @@ fun AppBottomNavigationBar(navController: NavController) {
                         imageVector = bottomNavigationIcon,
                         contentDescription = bottomNavigationLabel,
                         tint =
-                        if (isSelected) MaterialTheme.colorScheme.primary
-                        else MaterialTheme.colorScheme.onSurface
+                            if (isSelected) {
+                                MaterialTheme.colorScheme.primary
+                            } else {
+                                MaterialTheme.colorScheme.onSurface
+                            },
                     )
                 },
                 selected = isSelected,
@@ -166,20 +179,21 @@ fun AppBottomNavigationBar(navController: NavController) {
                     CommonText(
                         text = bottomNavigationLabel,
                         color = MaterialTheme.colorScheme.onSurface,
-                        style = MaterialTheme.typography.labelMedium
+                        style = MaterialTheme.typography.labelMedium,
                     )
                 },
-                colors = NavigationBarItemDefaults.colors(
-                    selectedIconColor = MaterialTheme.colorScheme.primary,
-                    unselectedIconColor = MaterialTheme.colorScheme.onSurface,
-                    indicatorColor = MaterialTheme.colorScheme.secondary
-                ),
+                colors =
+                    NavigationBarItemDefaults.colors(
+                        selectedIconColor = MaterialTheme.colorScheme.primary,
+                        unselectedIconColor = MaterialTheme.colorScheme.onSurface,
+                        indicatorColor = MaterialTheme.colorScheme.secondary,
+                    ),
                 onClick = {
                     navController.navigate(screenRoute) {
                         popUpTo(navController.graph.startDestinationId)
                         launchSingleTop = true
                     }
-                }
+                },
             )
         }
     }
@@ -198,7 +212,7 @@ fun AppFloatingActionButton(navController: NavController) {
             containerColor = MaterialTheme.colorScheme.primary,
             contentColor = Color.White,
             modifier = Modifier.clip(CircleShape),
-            onClick = {}
+            onClick = {},
         ) {
             Icon(Icons.Default.Add, contentDescription = "Add")
         }
@@ -217,11 +231,11 @@ fun AppNavigationIcon(navController: NavController) {
         val backNavigationIcon = backNavigation.getIcon()
 
         IconButton(
-            onClick = { navController.navigateUp() }
+            onClick = { navController.navigateUp() },
         ) {
             Icon(
                 imageVector = backNavigationIcon,
-                contentDescription = null
+                contentDescription = null,
             )
         }
     }

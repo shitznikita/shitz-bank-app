@@ -5,6 +5,14 @@ plugins {
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.hilt)
     id("org.jetbrains.kotlin.kapt")
+    alias(libs.plugins.detekt)
+}
+
+detekt {
+    config = files("../config/detekt/detekt.yml")
+    buildUponDefaultConfig = true
+    autoCorrect = true
+    baseline = file("detekt-baseline.xml")
 }
 
 android {
@@ -26,7 +34,7 @@ android {
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                "proguard-rules.pro",
             )
         }
     }
@@ -70,5 +78,4 @@ dependencies {
     kapt(libs.hilt.compiler)
     implementation(libs.hilt.navigation.compose)
     implementation(libs.kotlinx.datetime)
-
 }

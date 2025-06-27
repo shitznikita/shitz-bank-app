@@ -1,40 +1,37 @@
 package com.example.shitzbank.data.network
 
-import com.example.shitzbank.domain.model.Account
-import com.example.shitzbank.domain.model.AccountCreateRequest
-import com.example.shitzbank.domain.model.AccountHistoryResponse
-import com.example.shitzbank.domain.model.AccountResponse
-import com.example.shitzbank.domain.model.Category
-import com.example.shitzbank.domain.model.TransactionRequest
-import com.example.shitzbank.domain.model.TransactionResponse
+import com.example.shitzbank.data.dtos.AccountCreateRequestDto
+import com.example.shitzbank.data.dtos.AccountDto
+import com.example.shitzbank.data.dtos.AccountHistoryResponseDto
+import com.example.shitzbank.data.dtos.AccountResponseDto
+import com.example.shitzbank.data.dtos.CategoryDto
+import com.example.shitzbank.data.dtos.TransactionRequestDto
+import com.example.shitzbank.data.dtos.TransactionResponseDto
 import retrofit2.http.Body
-import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.POST
-import retrofit2.http.PUT
 import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface ShmrFinanceApi {
-
     @GET("accounts")
-    suspend fun getAccounts(): List<Account>
+    suspend fun getAccounts(): List<AccountDto>
 
     @POST("accounts")
     suspend fun createAccount(
-        @Body request: AccountCreateRequest
-    ): Account
+        @Body request: AccountCreateRequestDto,
+    ): AccountDto
 
     @GET("accounts/{id}")
     suspend fun getAccountById(
-        @Path("id") id: Int
-    ): AccountResponse
+        @Path("id") id: Int,
+    ): AccountResponseDto
 
 //    @PUT("accounts/{id}")
 //    suspend fun updateAccountById(
 //        @Path("id") id: Int,
-//        @Body request: AccountCreateRequest
-//    ): Account
+//        @Body request: AccountCreateRequestDto
+//    ): AccountDto
 //
 //    @DELETE("accounts/{id}")
 //    suspend fun deleteAccountById(
@@ -43,31 +40,31 @@ interface ShmrFinanceApi {
 
     @GET("accounts/{id}/history")
     suspend fun getAccountHistory(
-        @Path("id") id: Int
-    ): AccountHistoryResponse
+        @Path("id") id: Int,
+    ): AccountHistoryResponseDto
 
     @GET("categories")
-    suspend fun getCategories(): List<Category>
+    suspend fun getCategories(): List<CategoryDto>
 
     @GET("categories/type/{isIncome}")
     suspend fun getCategoriesByType(
-        @Path("isIncome") isIncome: Boolean
-    ): List<Category>
+        @Path("isIncome") isIncome: Boolean,
+    ): List<CategoryDto>
 
     @POST("transactions")
     suspend fun createTransaction(
-        @Body request: TransactionRequest
-    ): TransactionResponse
+        @Body request: TransactionRequestDto,
+    ): TransactionResponseDto
 
     @GET("transactions/{id}")
     suspend fun getTransactionsById(
-        @Path("id") id: Int
-    ): TransactionResponse
+        @Path("id") id: Int,
+    ): TransactionResponseDto
 
 //    @PUT("transactions/{id}")
 //    suspend fun updateTransactionById(
 //        @Path("id") id: Int,
-//        @Body request: TransactionRequest
+//        @Body request: TransactionRequestDto
 //    )
 //
 //    @DELETE("transactions/{id}")
@@ -79,7 +76,6 @@ interface ShmrFinanceApi {
     suspend fun getTransactionsForPeriod(
         @Path("accountId") accountId: Int,
         @Query("startDate") startDate: String,
-        @Query("endDate") endDate: String
-    ): List<TransactionResponse>
-
+        @Query("endDate") endDate: String,
+    ): List<TransactionResponseDto>
 }

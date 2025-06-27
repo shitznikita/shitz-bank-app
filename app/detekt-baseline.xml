@@ -1,0 +1,59 @@
+<?xml version="1.0" ?>
+<SmellBaseline>
+  <ManuallySuppressedIssues></ManuallySuppressedIssues>
+  <CurrentIssues>
+    <ID>FunctionNaming:AccountScreen.kt$@Composable fun AccountListItem( lead: (@Composable () -&gt; Unit)? = null, content: @Composable () -&gt; Unit, trail: (@Composable () -&gt; Unit), )</ID>
+    <ID>FunctionNaming:AccountScreen.kt$@Composable fun AccountScreen(viewModel: AccountViewModel = hiltViewModel())</ID>
+    <ID>FunctionNaming:AccountScreen.kt$@Composable fun BalanceAccountListItem(item: Account)</ID>
+    <ID>FunctionNaming:AccountScreen.kt$@Composable fun CurrencyAccountListItem(item: Account)</ID>
+    <ID>FunctionNaming:AmountTrailingContent.kt$@Composable fun AmountTrailingContent( amount: Double, currency: String, )</ID>
+    <ID>FunctionNaming:App.kt$@Composable fun App(viewModel: AppViewModel = hiltViewModel())</ID>
+    <ID>FunctionNaming:App.kt$@Composable fun AppBottomNavigationBar(navController: NavController)</ID>
+    <ID>FunctionNaming:App.kt$@Composable fun AppFloatingActionButton(navController: NavController)</ID>
+    <ID>FunctionNaming:App.kt$@Composable fun AppNavigationIcon(navController: NavController)</ID>
+    <ID>FunctionNaming:App.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable fun AppTopBar(navController: NavController)</ID>
+    <ID>FunctionNaming:CategoriesScreen.kt$@Composable fun CategoriesScreen(viewModel: CategoriesViewModel = hiltViewModel())</ID>
+    <ID>FunctionNaming:CategoriesScreen.kt$@Composable fun SearchInput( query: String, onQueryChange: (String) -&gt; Unit, onSearchClick: () -&gt; Unit, modifier: Modifier = Modifier, )</ID>
+    <ID>FunctionNaming:CommonLazyColumn.kt$@Composable fun &lt;T&gt; CommonLazyColumn( modifier: Modifier = Modifier, topItem: (@Composable () -&gt; Unit)? = null, itemsList: List&lt;T&gt;, itemTemplate: @Composable (T) -&gt; Unit, )</ID>
+    <ID>FunctionNaming:CommonListItem.kt$@Composable fun CommonListItem( modifier: Modifier = Modifier, lead: (@Composable () -&gt; Unit)? = null, content: @Composable () -&gt; Unit, supportingContent: (@Composable () -&gt; Unit)? = null, trail: (@Composable () -&gt; Unit)? = null, backgroundColor: Color = MaterialTheme.colorScheme.background, )</ID>
+    <ID>FunctionNaming:CommonText.kt$@Composable fun CommonText( modifier: Modifier = Modifier, text: String, color: Color, style: TextStyle, maxLines: Int = 1, overflow: TextOverflow = TextOverflow.MiddleEllipsis, textAlign: TextAlign? = null, )</ID>
+    <ID>FunctionNaming:CustomDatePicker.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable fun CustomDatePicker( datePickerState: DatePickerState, onDateSelected: (Long?) -&gt; Unit, onDismiss: () -&gt; Unit, )</ID>
+    <ID>FunctionNaming:DateListItem.kt$@Composable fun DateListItem( modifier: Modifier, content: String, date: LocalDate, )</ID>
+    <ID>FunctionNaming:DateTrailingContent.kt$@Composable fun DateTrailingContent( amount: Double, currency: String, date: LocalDateTime, )</ID>
+    <ID>FunctionNaming:ExpensesScreen.kt$@Composable fun ExpensesScreen(viewModel: ExpensesViewModel = hiltViewModel())</ID>
+    <ID>FunctionNaming:IncomesScreen.kt$@Composable fun IncomesScreen(viewModel: IncomesViewModel = hiltViewModel())</ID>
+    <ID>FunctionNaming:LeadIcon.kt$@Composable fun LeadIcon( modifier: Modifier = Modifier, label: String, backgroundColor: Color = Color.White, )</ID>
+    <ID>FunctionNaming:PriceDisplay.kt$@Composable fun PriceDisplay( amount: Double, currency: String, modifier: Modifier = Modifier, )</ID>
+    <ID>FunctionNaming:ResultStateHandler.kt$@Composable fun &lt;T&gt; ResultStateHandler( state: ResultState&lt;T&gt;, onSuccess: @Composable (data: T) -&gt; Unit, modifier: Modifier = Modifier, )</ID>
+    <ID>FunctionNaming:SettingsScreen.kt$@Composable fun NavigationListItem(item: SettingsItem.NavigationSetting)</ID>
+    <ID>FunctionNaming:SettingsScreen.kt$@Composable fun SettingsScreen(viewModel: SettingsViewModel = viewModel())</ID>
+    <ID>FunctionNaming:SettingsScreen.kt$@Composable fun SwitchableListItem( viewModel: SettingsViewModel, item: SettingsItem.SwitchSetting, )</ID>
+    <ID>FunctionNaming:Theme.kt$@Composable fun ShitzbankTheme( darkTheme: Boolean = isSystemInDarkTheme(), dynamicColor: Boolean = false, content: @Composable () -&gt; Unit, )</ID>
+    <ID>FunctionNaming:TotalAmountListItem.kt$@Composable fun TotalAmountListItem(totalAmount: Double)</ID>
+    <ID>FunctionNaming:TrailingContent.kt$@Composable fun TrailingContent( content: @Composable () -&gt; Unit, icon: (@Composable () -&gt; Unit)? = null, )</ID>
+    <ID>FunctionNaming:TransactionsHistoryScreen.kt$@Composable fun TransactionsHistoryHeader( startDate: LocalDate, onStartDateClick: () -&gt; Unit, endDate: LocalDate, onEndDateClick: () -&gt; Unit, total: Double, )</ID>
+    <ID>FunctionNaming:TransactionsHistoryScreen.kt$@Composable fun TransactionsHistoryItemTemplate(item: TransactionResponse)</ID>
+    <ID>FunctionNaming:TransactionsHistoryScreen.kt$@Composable fun TransactionsHistoryScreen(viewModel: TransactionsHistoryViewModel = hiltViewModel())</ID>
+    <ID>FunctionNaming:TransactionsHistoryScreen.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable fun EndDatePicker( currentStartDate: LocalDate, currentEndDate: LocalDate, onDateSelected: (LocalDate) -&gt; Unit, onDismiss: () -&gt; Unit, )</ID>
+    <ID>FunctionNaming:TransactionsHistoryScreen.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable fun StartDatePicker( currentStartDate: LocalDate, currentEndDate: LocalDate, onDateSelected: (LocalDate) -&gt; Unit, onDismiss: () -&gt; Unit, )</ID>
+    <ID>LongMethod:CustomDatePicker.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable fun CustomDatePicker( datePickerState: DatePickerState, onDateSelected: (Long?) -&gt; Unit, onDismiss: () -&gt; Unit, )</ID>
+    <ID>LongParameterList:CommonListItem.kt$( modifier: Modifier = Modifier, lead: (@Composable () -&gt; Unit)? = null, content: @Composable () -&gt; Unit, supportingContent: (@Composable () -&gt; Unit)? = null, trail: (@Composable () -&gt; Unit)? = null, backgroundColor: Color = MaterialTheme.colorScheme.background, )</ID>
+    <ID>LongParameterList:CommonText.kt$( modifier: Modifier = Modifier, text: String, color: Color, style: TextStyle, maxLines: Int = 1, overflow: TextOverflow = TextOverflow.MiddleEllipsis, textAlign: TextAlign? = null, )</ID>
+    <ID>MaxLineLength:TransactionsHistoryScreen.kt$&lt;no name provided&gt;$val selectedDate = Instant.ofEpochMilli(utcTimeMillis).atZone(ZoneId.systemDefault()).toLocalDate()</ID>
+    <ID>ReturnCount:NetworkMonitor.kt$NetworkMonitor$private fun isCurrentlyConnected(): Boolean</ID>
+    <ID>TooGenericExceptionCaught:RetryPolicy.kt$e: Throwable</ID>
+    <ID>TopLevelPropertyNaming:Color.kt$const val ContainerHighGreenValue = 0xFFD4FAE6</ID>
+    <ID>TopLevelPropertyNaming:Color.kt$const val ContainerHighGreyValue = 0xFFECE6F0</ID>
+    <ID>TopLevelPropertyNaming:Color.kt$const val DeleteButtonValue = 0xFFE46962</ID>
+    <ID>TopLevelPropertyNaming:Color.kt$const val DividerGreyValue = 0xFFCAC4D0</ID>
+    <ID>TopLevelPropertyNaming:Color.kt$const val PrimaryGreenValue = 0xFF2AE881</ID>
+    <ID>TopLevelPropertyNaming:Color.kt$const val SurfaceContainerGreyValue = 0xFFF3EDF7</ID>
+    <ID>TopLevelPropertyNaming:Color.kt$const val SurfaceWhiteValue = 0xFFFEF7FF</ID>
+    <ID>TopLevelPropertyNaming:Color.kt$const val TextBlackValue = 0xFF1D1B20</ID>
+    <ID>TopLevelPropertyNaming:Color.kt$const val TextGrayValue = 0xFF49454F</ID>
+    <ID>UseCheckOrError:RetryPolicy.kt$throw IllegalStateException("Failed to execute block after $maxRetries attempts. This should not be reached.")</ID>
+    <ID>VariableNaming:ExpensesViewModel.kt$ExpensesViewModel$private val DEFAULT_TOTAL_VALUE = 0.0</ID>
+    <ID>VariableNaming:IncomesViewModel.kt$IncomesViewModel$private val DEFAULT_TOTAL_VALUE = 0.0</ID>
+    <ID>VariableNaming:TransactionsHistoryViewModel.kt$TransactionsHistoryViewModel$private val DEFAULT_TOTAL_VALUE = 0.0</ID>
+  </CurrentIssues>
+</SmellBaseline>

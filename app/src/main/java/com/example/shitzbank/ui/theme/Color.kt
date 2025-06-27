@@ -2,12 +2,22 @@ package com.example.shitzbank.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-val PrimaryGreen = Color(0xFF2AE881)
-val ContainerHighGreen = Color(0xFFD4FAE6)
-val ContainerHighGrey = Color(0xFFECE6F0)
-val SurfaceContainerGrey = Color(0xFFF3EDF7)
-val SurfaceWhite = Color(0xFFFEF7FF)
-val TextBlack = Color(0xFF1D1B20)
-val TextGray = Color(0xFF49454F)
-val DeleteButton = Color(0xFFE46962)
-val DividerGrey = Color(0xFFCAC4D0)
+const val PrimaryGreenValue = 0xFF2AE881
+const val ContainerHighGreenValue = 0xFFD4FAE6
+const val ContainerHighGreyValue = 0xFFECE6F0
+const val SurfaceContainerGreyValue = 0xFFF3EDF7
+const val SurfaceWhiteValue = 0xFFFEF7FF
+const val TextBlackValue = 0xFF1D1B20
+const val TextGrayValue = 0xFF49454F
+const val DeleteButtonValue = 0xFFE46962
+const val DividerGreyValue = 0xFFCAC4D0
+
+val PrimaryGreen = Color(PrimaryGreenValue)
+val ContainerHighGreen = Color(ContainerHighGreenValue)
+val ContainerHighGrey = Color(ContainerHighGreyValue)
+val SurfaceContainerGrey = Color(SurfaceContainerGreyValue)
+val SurfaceWhite = Color(SurfaceWhiteValue)
+val TextBlack = Color(TextBlackValue)
+val TextGray = Color(TextGrayValue)
+val DeleteButton = Color(DeleteButtonValue)
+val DividerGrey = Color(DividerGreyValue)
