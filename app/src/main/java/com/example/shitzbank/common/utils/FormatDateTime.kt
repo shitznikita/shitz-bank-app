@@ -1,14 +1,17 @@
 package com.example.shitzbank.common.utils
 
-import java.time.Instant
 import java.time.LocalDateTime
-import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 
-fun formatDateTime(date: String): String {
-    val instant = Instant.parse(date)
-    val localDateTime = LocalDateTime.ofInstant(instant, ZoneId.systemDefault())
+/**
+ * Форматирует объект [LocalDateTime] в строку в формате "ЧЧ:мм дд.ММ"
+ * с использованием региональных настроек по умолчанию.
+ *
+ * @param date Объект [LocalDateTime], который необходимо отформатировать.
+ * @return Отформатированная строка даты и времени (например, "14:30 27.06").
+ */
+fun formatDateTime(date: LocalDateTime): String {
     val formatter = DateTimeFormatter.ofPattern("HH:mm dd.MM", Locale.getDefault())
-    return localDateTime.format(formatter)
+    return date.format(formatter)
 }
