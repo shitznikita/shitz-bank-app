@@ -47,6 +47,38 @@ fun AccountScreen(viewModel: AccountViewModel = hiltViewModel()) {
 }
 
 @Composable
+fun AccountNameListItem(
+    item: Account,
+    onClick: () -> Unit
+) {
+    AccountListItem(
+        lead = { LeadIcon(label = "💰") },
+        content = {
+            CommonText(
+                text = item.name,
+                color = MaterialTheme.colorScheme.onPrimary,
+                style = MaterialTheme.typography.bodyLarge
+            )
+        },
+        trail = {
+            TrailingContent(
+                content = {
+                    PriceDisplay(
+                        amount = item.balance,
+                        currency = item.currency,
+                    )
+                },
+                icon = {
+                    Icon(ImageVector.vectorResource(R.drawable.drill_in), null)
+                }
+            )
+        },
+        onClick = onClick
+    )
+}
+
+
+@Composable
 fun BalanceAccountListItem(item: Account) {
     AccountListItem(
         lead = { LeadIcon(label = "💰") },
@@ -105,11 +137,12 @@ fun AccountListItem(
     lead: (@Composable () -> Unit)? = null,
     content: @Composable () -> Unit,
     trail: (@Composable () -> Unit),
+    onClick: () -> Unit = {}
 ) {
     CommonListItem(
         modifier =
             Modifier.background(MaterialTheme.colorScheme.secondary)
-                .clickable { },
+                .clickable(onClick = onClick),
         lead = lead,
         content = content,
         trail = trail,
