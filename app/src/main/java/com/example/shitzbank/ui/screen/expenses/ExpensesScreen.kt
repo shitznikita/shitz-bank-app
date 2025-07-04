@@ -10,18 +10,19 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.shitzbank.ui.common.AmountTrailingContent
+import com.example.shitzbank.ui.common.trail.AmountTrailingContent
 import com.example.shitzbank.ui.common.CommonLazyColumn
 import com.example.shitzbank.ui.common.CommonListItem
 import com.example.shitzbank.ui.common.CommonText
 import com.example.shitzbank.ui.common.LeadIcon
 import com.example.shitzbank.ui.common.ResultStateHandler
-import com.example.shitzbank.ui.common.TotalAmountListItem
+import com.example.shitzbank.ui.common.list.TotalAmountListItem
 
 @Composable
 fun ExpensesScreen(viewModel: ExpensesViewModel = hiltViewModel()) {
     val state by viewModel.expensesState.collectAsState()
     val totalExpense by viewModel.totalExpense.collectAsState()
+    val currency by viewModel.accountCurrency.collectAsState()
 
     LaunchedEffect(Unit) {
         viewModel.loadExpenses()
@@ -32,7 +33,10 @@ fun ExpensesScreen(viewModel: ExpensesViewModel = hiltViewModel()) {
         onSuccess = { data ->
             CommonLazyColumn(
                 topItem = {
-                    TotalAmountListItem(totalExpense)
+                    TotalAmountListItem(
+                        totalAmount = totalExpense,
+                        currency = currency
+                    )
                 },
                 itemsList = data,
                 itemTemplate = { item ->

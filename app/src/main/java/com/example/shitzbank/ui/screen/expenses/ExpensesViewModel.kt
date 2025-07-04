@@ -6,8 +6,8 @@ import com.example.shitzbank.common.network.ConnectionStatus
 import com.example.shitzbank.common.network.NetworkMonitor
 import com.example.shitzbank.common.network.NetworkMonitorViewModel
 import com.example.shitzbank.domain.model.TransactionResponse
-import com.example.shitzbank.domain.usecase.GetDefaultAccountIdUseCase
-import com.example.shitzbank.domain.usecase.GetExpensesUseCase
+import com.example.shitzbank.domain.usecase.account.GetDefaultAccountUseCase
+import com.example.shitzbank.domain.usecase.transactions.GetExpensesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -22,7 +22,7 @@ class ExpensesViewModel
     @Inject
     constructor(
         private val getExpensesUseCase: GetExpensesUseCase,
-        private val getDefaultAccountIdUseCase: GetDefaultAccountIdUseCase,
+        private val getDefaultAccountUseCase: GetDefaultAccountUseCase,
         networkMonitor: NetworkMonitor,
     ) : NetworkMonitorViewModel(networkMonitor) {
         private val _expensesState = MutableStateFlow<ResultState<List<TransactionResponse>>>(ResultState.Loading)
@@ -31,6 +31,9 @@ class ExpensesViewModel
         private val DEFAULT_TOTAL_VALUE = 0.0
         private val _totalExpense = MutableStateFlow(DEFAULT_TOTAL_VALUE)
         val totalExpense: StateFlow<Double> = _totalExpense.asStateFlow()
+
+        private val _accountCurrency = MutableStateFlow("")
+        val accountCurrency: StateFlow<String> = _accountCurrency.asStateFlow()
 
         init {
             viewModelScope.launch {
@@ -55,9 +58,11 @@ class ExpensesViewModel
                 val startDateString = LocalDate.now().format(apiFormatter)
                 val endDateString = LocalDate.now().format(apiFormatter)
 
-                val accountId = getDefaultAccountIdUseCase.execute()
+                val account = getDefaultAccountUseCase.execute()
 
-                val expenses = getExpensesUseCase.execute(accountId, startDateString, endDateString)
+                _accountCurrency.value = account.currency
+
+                val expenses = getExpensesUseCase.execute(account.id, startDateString, endDateString)
                 _expensesState.value = ResultState.Success(expenses)
 
                 if (expenses.isEmpty()) {

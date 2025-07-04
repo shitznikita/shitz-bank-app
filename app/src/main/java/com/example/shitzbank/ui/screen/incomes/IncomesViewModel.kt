@@ -6,8 +6,8 @@ import com.example.shitzbank.common.network.ConnectionStatus
 import com.example.shitzbank.common.network.NetworkMonitor
 import com.example.shitzbank.common.network.NetworkMonitorViewModel
 import com.example.shitzbank.domain.model.TransactionResponse
-import com.example.shitzbank.domain.usecase.GetDefaultAccountIdUseCase
-import com.example.shitzbank.domain.usecase.GetIncomesUseCase
+import com.example.shitzbank.domain.usecase.account.GetDefaultAccountUseCase
+import com.example.shitzbank.domain.usecase.transactions.GetIncomesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -21,7 +21,7 @@ import javax.inject.Inject
 class IncomesViewModel
     @Inject
     constructor(
-        private val getDefaultAccountIdUseCase: GetDefaultAccountIdUseCase,
+        private val getDefaultAccountUseCase: GetDefaultAccountUseCase,
         private val getIncomesUseCase: GetIncomesUseCase,
         networkMonitor: NetworkMonitor,
     ) : NetworkMonitorViewModel(networkMonitor) {
@@ -31,6 +31,9 @@ class IncomesViewModel
         private val DEFAULT_TOTAL_VALUE = 0.0
         private val _totalIncome = MutableStateFlow(DEFAULT_TOTAL_VALUE)
         val totalIncome: StateFlow<Double> = _totalIncome.asStateFlow()
+
+        private val _accountCurrency = MutableStateFlow("")
+        val accountCurrency: StateFlow<String> = _accountCurrency.asStateFlow()
 
         init {
             viewModelScope.launch {
@@ -55,9 +58,11 @@ class IncomesViewModel
                 val startDateString = LocalDate.now().format(apiFormatter)
                 val endDateString = LocalDate.now().format(apiFormatter)
 
-                val accountId = getDefaultAccountIdUseCase.execute()
+                val account = getDefaultAccountUseCase.execute()
 
-                val incomes = getIncomesUseCase.execute(accountId, startDateString, endDateString)
+                _accountCurrency.value = account.currency
+
+                val incomes = getIncomesUseCase.execute(account.id, startDateString, endDateString)
                 _incomesState.value = ResultState.Success(incomes)
 
                 if (incomes.isEmpty()) {

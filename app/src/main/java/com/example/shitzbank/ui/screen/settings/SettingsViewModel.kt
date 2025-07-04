@@ -1,6 +1,8 @@
 package com.example.shitzbank.ui.screen.settings
 
 import androidx.lifecycle.ViewModel
+import com.example.shitzbank.ui.screen.settings.common.SettingsItem
+import com.example.shitzbank.ui.screen.settings.common.SettingsTitles
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update

@@ -9,5 +9,5 @@ import javax.inject.Inject
 class AppViewModel
     @Inject
     constructor(
-        networkMonitor: NetworkMonitor,
+        networkMonitor: NetworkMonitor
     ) : NetworkMonitorViewModel(networkMonitor)

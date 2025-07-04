@@ -4,7 +4,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
-import com.example.shitzbank.common.utils.getCurrencySymbol
+import com.example.shitzbank.common.utils.currency.Currency
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
 import java.util.Locale
@@ -36,7 +36,7 @@ fun PriceDisplay(
 
     CommonText(
         modifier = modifier,
-        text = "$formattedAmount ${getCurrencySymbol(currency)}",
+        text = "$formattedAmount ${Currency.fromCode(currency)}",
         textAlign = TextAlign.Start,
         style = MaterialTheme.typography.bodyLarge,
         color = MaterialTheme.colorScheme.onPrimary,
