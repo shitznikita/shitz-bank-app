@@ -10,6 +10,7 @@ import com.example.shitzbank.data.dtos.TransactionResponseDto
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.PUT
 import retrofit2.http.Path
 import retrofit2.http.Query
 
@@ -27,11 +28,11 @@ interface ShmrFinanceApi {
         @Path("id") id: Int,
     ): AccountResponseDto
 
-//    @PUT("accounts/{id}")
-//    suspend fun updateAccountById(
-//        @Path("id") id: Int,
-//        @Body request: AccountCreateRequestDto
-//    ): AccountDto
+    @PUT("accounts/{id}")
+    suspend fun updateAccountById(
+        @Path("id") id: Int,
+        @Body request: AccountCreateRequestDto
+    ): AccountDto
 //
 //    @DELETE("accounts/{id}")
 //    suspend fun deleteAccountById(

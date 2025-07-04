@@ -7,8 +7,8 @@ import com.example.shitzbank.common.network.ConnectionStatus
 import com.example.shitzbank.common.network.NetworkMonitor
 import com.example.shitzbank.common.network.NetworkMonitorViewModel
 import com.example.shitzbank.domain.model.TransactionResponse
-import com.example.shitzbank.domain.usecase.GetDefaultAccountIdUseCase
-import com.example.shitzbank.domain.usecase.GetTransactionsUseCase
+import com.example.shitzbank.domain.usecase.account.GetDefaultAccountUseCase
+import com.example.shitzbank.domain.usecase.transactions.GetTransactionsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -23,7 +23,7 @@ class TransactionsHistoryViewModel
     @Inject
     constructor(
         savedStateHandle: SavedStateHandle,
-        private val getDefaultAccountIdUseCase: GetDefaultAccountIdUseCase,
+        private val getDefaultAccountUseCase: GetDefaultAccountUseCase,
         private val getTransactionsUseCase: GetTransactionsUseCase,
         networkMonitor: NetworkMonitor,
     ) : NetworkMonitorViewModel(networkMonitor) {
@@ -41,6 +41,9 @@ class TransactionsHistoryViewModel
         private val DEFAULT_TOTAL_VALUE = 0.0
         private val _total = MutableStateFlow(DEFAULT_TOTAL_VALUE)
         val total = _total.asStateFlow()
+
+        private val _accountCurrency = MutableStateFlow("")
+        val accountCurrency: StateFlow<String> = _accountCurrency.asStateFlow()
 
         private val _dateError = MutableStateFlow<String?>(null)
         val dateError: StateFlow<String?> = _dateError.asStateFlow()
@@ -74,14 +77,16 @@ class TransactionsHistoryViewModel
                 _transactionsState.value = ResultState.Loading
                 _total.value = DEFAULT_TOTAL_VALUE
 
-                val accountId = getDefaultAccountIdUseCase.execute()
+                val account = getDefaultAccountUseCase.execute()
 
                 val apiFormatter = DateTimeFormatter.ISO_LOCAL_DATE
                 val start = _startDate.value.format(apiFormatter)
                 val end = _endDate.value.format(apiFormatter)
 
+                _accountCurrency.value = account.currency
+
                 val transactions =
-                    getTransactionsUseCase.execute(accountId, start, end).filter {
+                    getTransactionsUseCase.execute(account.id, start, end).filter {
                         it.category.isIncome == isIncome
                     }
                 _transactionsState.value = ResultState.Success(transactions)

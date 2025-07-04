@@ -1,4 +1,4 @@
-package com.example.shitzbank.domain.usecase
+package com.example.shitzbank.domain.usecase.account
 
 import com.example.shitzbank.domain.repository.AccountRepository
 import javax.inject.Inject

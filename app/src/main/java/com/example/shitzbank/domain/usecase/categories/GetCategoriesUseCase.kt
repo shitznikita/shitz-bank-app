@@ -1,4 +1,4 @@
-package com.example.shitzbank.domain.usecase
+package com.example.shitzbank.domain.usecase.categories
 
 import com.example.shitzbank.domain.model.Category
 import com.example.shitzbank.domain.repository.CategoryRepository

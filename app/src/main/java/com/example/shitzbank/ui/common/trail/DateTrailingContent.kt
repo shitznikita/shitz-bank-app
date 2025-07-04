@@ -1,4 +1,4 @@
-package com.example.shitzbank.ui.common
+package com.example.shitzbank.ui.common.trail
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.Icon
@@ -8,7 +8,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import com.example.shitzbank.R
-import com.example.shitzbank.common.utils.formatDateTime
+import com.example.shitzbank.common.utils.datetime.formatDateTime
+import com.example.shitzbank.ui.common.CommonText
+import com.example.shitzbank.ui.common.PriceDisplay
+import com.example.shitzbank.ui.common.TrailingContent
 import java.time.LocalDateTime
 
 /**

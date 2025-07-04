@@ -1,4 +1,4 @@
-package com.example.shitzbank.common.utils
+package com.example.shitzbank.common.utils.datetime
 
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter

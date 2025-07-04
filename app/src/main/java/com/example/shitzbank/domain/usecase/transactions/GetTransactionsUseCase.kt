@@ -1,4 +1,4 @@
-package com.example.shitzbank.domain.usecase
+package com.example.shitzbank.domain.usecase.transactions
 
 import com.example.shitzbank.domain.model.TransactionResponse
 import com.example.shitzbank.domain.repository.TransactionRepository

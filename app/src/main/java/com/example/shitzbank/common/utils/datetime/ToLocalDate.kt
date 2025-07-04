@@ -1,4 +1,4 @@
-package com.example.shitzbank.common.utils.localdate
+package com.example.shitzbank.common.utils.datetime
 
 import java.time.Instant
 import java.time.LocalDate

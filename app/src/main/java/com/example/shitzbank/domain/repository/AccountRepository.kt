@@ -28,4 +28,6 @@ interface AccountRepository {
      * @throws Exception Может выбросить исключение в случае ошибки получения счетов (например, сетевой ошибки).
      */
     suspend fun getAccounts(): List<Account>
+
+    suspend fun updateAccount(id: Int, request: AccountCreateRequest): Account
 }

@@ -1,4 +1,4 @@
-package com.example.shitzbank.ui.screen.settings
+package com.example.shitzbank.ui.screen.settings.common
 
 /**
  * Запечатанный класс, представляющий различные типы элементов, которые могут быть отображены на экране настроек.

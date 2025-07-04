@@ -51,4 +51,19 @@ class AccountRepositoryImpl
                 }
             }
         }
+
+        override suspend fun updateAccount(id: Int, request: AccountCreateRequest): Account {
+            return withContext(coroutineDispatchers.io) {
+                val requestDto = AccountCreateRequestDto(
+                    name = request.name,
+                    balance = request.balance,
+                    currency = request.currency
+                )
+                val updateAccountResponseDto =
+                    retryWithBackoff {
+                        apiService.updateAccountById(id, requestDto)
+                    }
+                updateAccountResponseDto.toDomain()
+            }
+        }
     }

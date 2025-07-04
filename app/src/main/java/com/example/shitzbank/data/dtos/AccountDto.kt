@@ -1,6 +1,6 @@
 package com.example.shitzbank.data.dtos
 
-import com.example.shitzbank.common.utils.parseDateTime
+import com.example.shitzbank.common.utils.datetime.parseDateTime
 import com.example.shitzbank.domain.model.Account
 import kotlinx.serialization.Serializable
 
