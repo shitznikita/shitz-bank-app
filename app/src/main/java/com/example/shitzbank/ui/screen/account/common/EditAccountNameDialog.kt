@@ -8,7 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.window.DialogProperties
 import com.example.shitzbank.R
-import com.example.shitzbank.ui.common.CommonText
+import com.example.shitzbank.ui.common.composable.CommonText
 
 @Composable
 fun EditAccountNameDialog(

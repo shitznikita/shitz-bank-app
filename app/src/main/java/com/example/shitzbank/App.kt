@@ -35,9 +35,9 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.shitzbank.common.network.ConnectionStatus
-import com.example.shitzbank.ui.common.CommonText
+import com.example.shitzbank.ui.common.composable.CommonText
 import com.example.shitzbank.ui.navigation.Screen
-import com.example.shitzbank.ui.navigation.currentRouteAsState
+import com.example.shitzbank.ui.navigation.utils.currentRouteAsState
 import com.example.shitzbank.ui.navigation.getScreen
 import com.example.shitzbank.ui.navigation.screens
 import com.example.shitzbank.ui.screen.account.AccountScreen

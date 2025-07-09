@@ -7,8 +7,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.shitzbank.ui.common.CommonLazyColumn
-import com.example.shitzbank.ui.common.ResultStateHandler
+import com.example.shitzbank.ui.common.composable.CommonLazyColumn
+import com.example.shitzbank.ui.common.composable.ResultStateHandler
 import com.example.shitzbank.ui.screen.history.common.EndDatePicker
 import com.example.shitzbank.ui.screen.history.common.StartDatePicker
 import com.example.shitzbank.ui.screen.history.common.TransactionsHistoryHeader

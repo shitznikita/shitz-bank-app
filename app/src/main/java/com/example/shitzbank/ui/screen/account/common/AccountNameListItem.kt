@@ -8,10 +8,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import com.example.shitzbank.R
 import com.example.shitzbank.domain.model.Account
-import com.example.shitzbank.ui.common.CommonText
-import com.example.shitzbank.ui.common.LeadIcon
-import com.example.shitzbank.ui.common.PriceDisplay
-import com.example.shitzbank.ui.common.TrailingContent
+import com.example.shitzbank.ui.common.composable.CommonText
+import com.example.shitzbank.ui.common.composable.LeadIcon
+import com.example.shitzbank.ui.common.composable.PriceDisplay
+import com.example.shitzbank.ui.common.composable.TrailingContent
 
 @Composable
 fun AccountNameListItem(

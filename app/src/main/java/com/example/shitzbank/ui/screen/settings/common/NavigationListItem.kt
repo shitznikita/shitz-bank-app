@@ -10,8 +10,8 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import com.example.shitzbank.R
-import com.example.shitzbank.ui.common.CommonListItem
-import com.example.shitzbank.ui.common.CommonText
+import com.example.shitzbank.ui.common.composable.CommonListItem
+import com.example.shitzbank.ui.common.composable.CommonText
 
 @Composable
 fun NavigationListItem(item: SettingsItem.NavigationSetting) {

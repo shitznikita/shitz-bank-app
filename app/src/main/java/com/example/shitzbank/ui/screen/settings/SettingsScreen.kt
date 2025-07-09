@@ -7,7 +7,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.shitzbank.R
-import com.example.shitzbank.ui.common.CommonLazyColumn
+import com.example.shitzbank.ui.common.composable.CommonLazyColumn
 import com.example.shitzbank.ui.screen.settings.common.NavigationListItem
 import com.example.shitzbank.ui.screen.settings.common.SettingsItem
 import com.example.shitzbank.ui.screen.settings.common.SettingsTitles

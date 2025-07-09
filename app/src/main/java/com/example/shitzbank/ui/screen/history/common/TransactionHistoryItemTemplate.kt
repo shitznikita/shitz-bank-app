@@ -5,9 +5,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.example.shitzbank.domain.model.TransactionResponse
-import com.example.shitzbank.ui.common.CommonListItem
-import com.example.shitzbank.ui.common.CommonText
-import com.example.shitzbank.ui.common.LeadIcon
+import com.example.shitzbank.ui.common.composable.CommonListItem
+import com.example.shitzbank.ui.common.composable.CommonText
+import com.example.shitzbank.ui.common.composable.LeadIcon
 import com.example.shitzbank.ui.common.trail.DateTrailingContent
 
 @Composable

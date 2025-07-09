@@ -45,4 +45,14 @@ sealed class BackNavigationIcon(
         iconResId = R.drawable.ic_back,
         routeResId = R.string.incomes_route,
     )
+
+    data object ExpenseClose : BackNavigationIcon(
+        iconResId = R.drawable.ic_cross,
+        routeResId = R.string.expenses_route
+    )
+
+    data object IncomeClose : BackNavigationIcon(
+        iconResId = R.drawable.ic_cross,
+        routeResId = R.string.incomes_route
+    )
 }

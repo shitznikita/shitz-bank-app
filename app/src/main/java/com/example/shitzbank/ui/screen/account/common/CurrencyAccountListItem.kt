@@ -9,8 +9,8 @@ import androidx.compose.ui.res.vectorResource
 import com.example.shitzbank.R
 import com.example.shitzbank.common.utils.currency.Currency
 import com.example.shitzbank.domain.model.Account
-import com.example.shitzbank.ui.common.CommonText
-import com.example.shitzbank.ui.common.TrailingContent
+import com.example.shitzbank.ui.common.composable.CommonText
+import com.example.shitzbank.ui.common.composable.TrailingContent
 
 @Composable
 fun CurrencyAccountListItem(

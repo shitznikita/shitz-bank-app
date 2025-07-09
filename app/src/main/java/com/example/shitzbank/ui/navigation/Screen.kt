@@ -48,7 +48,10 @@ sealed class Screen(
         titleResId = R.string.expenses_header,
         action = ActionIcon.ExpensesAction,
         bottomNavigationIcon = BottomNavigationIcon.ExpensesIcon,
-        relatedRoutesResIds = listOf(R.string.expenses_history_route),
+        relatedRoutesResIds = listOf(
+            R.string.expenses_history_route,
+            R.string.expense_route
+        )
     )
 
     /**
@@ -59,7 +62,10 @@ sealed class Screen(
         titleResId = R.string.incomes_header,
         action = ActionIcon.IncomesAction,
         bottomNavigationIcon = BottomNavigationIcon.IncomesIcon,
-        relatedRoutesResIds = listOf(R.string.incomes_history_route),
+        relatedRoutesResIds = listOf(
+            R.string.incomes_history_route,
+            R.string.income_route
+        )
     )
 
     /**
@@ -108,6 +114,20 @@ sealed class Screen(
         titleResId = R.string.history_header,
         action = ActionIcon.IncomesHistoryAction,
         backNavigationIcon = BackNavigationIcon.IncomesHistoryBack,
+    )
+
+    data object Expense : Screen(
+        routeResId = R.string.expense_route,
+        titleResId = R.string.expense_header,
+        action = ActionIcon.ExpenseAction,
+        backNavigationIcon = BackNavigationIcon.ExpenseClose
+    )
+
+    data object Income : Screen(
+        routeResId = R.string.income_route,
+        titleResId = R.string.income_header,
+        action = ActionIcon.IncomeAction,
+        backNavigationIcon = BackNavigationIcon.IncomeClose
     )
 }
 
