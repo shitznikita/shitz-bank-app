@@ -1,9 +1,7 @@
 package com.example.shitzbank.ui.navigation
 
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.res.vectorResource
 import com.example.shitzbank.R
 
 /**
@@ -146,6 +144,8 @@ fun getScreen(route: String): Screen {
         "settings" -> Screen.Settings
         "history/false" -> Screen.ExpensesHistory // Маршрут для истории расходов
         "history/true" -> Screen.IncomesHistory // Маршрут для истории доходов
+        "transaction/false/" -> Screen.Expense
+        "transaction/true/" -> Screen.Income
         else -> Screen.Expenses // Маршрут по умолчанию
     }
 }

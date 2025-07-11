@@ -16,6 +16,7 @@ import com.example.shitzbank.ui.navigation.Screen
  *
  * Обрабатывает специфический маршрут "history/{isIncome}", извлекая фактическое значение `isIncome`
  * из аргументов, чтобы предоставить более точный маршрут.
+ * Также обрабатывает маршрут "transaction/{isIncome}/{id}", извлекая `isIncome` и `id`.
  * В случае, если маршрут не определен, возвращает строковый ресурс, соответствующий
  * маршруту экрана [com.example.shitzbank.ui.navigation.Screen.Expenses].
  *
@@ -27,10 +28,17 @@ fun NavController.currentRouteAsState(): String {
     val navBackStackEntry by currentBackStackEntryAsState()
     val routePattern = navBackStackEntry?.destination?.route
 
-    return if (routePattern == "history/{isIncome}") {
-        val isIncome = navBackStackEntry?.arguments?.getBoolean("isIncome")
-        "history/$isIncome"
-    } else {
-        routePattern ?: stringResource(Screen.Expenses.routeResId)
+    return when {
+        routePattern == "history/{isIncome}" -> {
+            val isIncome = navBackStackEntry?.arguments?.getBoolean("isIncome")
+            "history/$isIncome"
+        }
+        routePattern == "transaction/{isIncome}/{id}" -> {
+            val isIncome = navBackStackEntry?.arguments?.getBoolean("isIncome")
+            "transaction/$isIncome/"
+        }
+        else -> {
+            routePattern ?: stringResource(Screen.Expenses.routeResId)
+        }
     }
 }

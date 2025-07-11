@@ -11,9 +11,14 @@ import com.example.shitzbank.ui.common.composable.LeadIcon
 import com.example.shitzbank.ui.common.trail.DateTrailingContent
 
 @Composable
-fun TransactionsHistoryItemTemplate(item: TransactionResponse) {
+fun TransactionsHistoryItemTemplate(
+    item: TransactionResponse,
+    onItemClick: (TransactionResponse) -> Unit
+) {
     CommonListItem(
-        modifier = Modifier.clickable { },
+        modifier = Modifier.clickable {
+            onItemClick(item)
+        },
         lead = {
             LeadIcon(
                 label = item.category.emoji,

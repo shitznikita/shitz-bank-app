@@ -46,6 +46,7 @@ import com.example.shitzbank.ui.screen.expenses.ExpensesScreen
 import com.example.shitzbank.ui.screen.history.TransactionsHistoryScreen
 import com.example.shitzbank.ui.screen.incomes.IncomesScreen
 import com.example.shitzbank.ui.screen.settings.SettingsScreen
+import com.example.shitzbank.ui.screen.transaction.TransactionScreen
 
 @Composable
 fun App(viewModel: AppViewModel = hiltViewModel()) {
@@ -91,7 +92,18 @@ fun App(viewModel: AppViewModel = hiltViewModel()) {
             composable(
                 route = "history/{isIncome}",
                 arguments = listOf(navArgument("isIncome") { type = NavType.BoolType }),
-            ) { TransactionsHistoryScreen() }
+            ) { TransactionsHistoryScreen(navController = navController) }
+            composable(
+                route = "transaction/{isIncome}/{id}",
+                arguments = listOf(
+                    navArgument("isIncome") { type = NavType.BoolType },
+                    navArgument("id") { type = NavType.IntType }
+                )
+            ) { backStackEntry ->
+                val isIncome = backStackEntry.arguments?.getBoolean("isIncome")
+                val id = backStackEntry.arguments?.getInt("id")
+                TransactionScreen(navController = navController)
+            }
         }
     }
 }
@@ -214,7 +226,10 @@ fun AppFloatingActionButton(navController: NavController) {
             modifier = Modifier.clip(CircleShape),
             onClick = {},
         ) {
-            Icon(Icons.Default.Add, contentDescription = "Add")
+            Icon(
+                imageVector = Icons.Default.Add,
+                contentDescription = stringResource(R.string.add)
+            )
         }
     }
 }
@@ -235,7 +250,7 @@ fun AppNavigationIcon(navController: NavController) {
         ) {
             Icon(
                 imageVector = backNavigationIcon,
-                contentDescription = null,
+                contentDescription = stringResource(R.string.back)
             )
         }
     }

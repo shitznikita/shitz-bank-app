@@ -8,8 +8,8 @@
     <string name="settings_route">settings</string>
     <string name="expenses_history_route">history/false</string>
     <string name="incomes_history_route">history/true</string>
-    <string name="expense_route">expense/</string>
-    <string name="income_route">income/</string>
+    <string name="expense_route">transaction/false/</string>
+    <string name="income_route">transaction/true/</string>
     
     <string name="expenses_header">Расходы сегодня</string>
     <string name="expenses_icon">Расходы</string>
@@ -47,4 +47,6 @@
     <string name="no_internet">Отсутствует подключение к интернету</string>
     <string name="balance_name">Название счёта</string>
     <string name="current_balance_name">Текущее название</string>
+    <string name="add">Добавить</string>
+    <string name="back">Назад</string>
 </resources>
