@@ -47,15 +47,18 @@ fun CategoriesScreen(viewModel: CategoriesViewModel = hiltViewModel()) {
                 itemTemplate = { item ->
                     CommonListItem(
                         modifier = Modifier.height(70.dp).clickable { },
-                        lead = { LeadIcon(label = item.emoji, backgroundColor = MaterialTheme.colorScheme.secondary) },
+                        lead = {
+                            LeadIcon(
+                                label = item.emoji,
+                                backgroundColor = MaterialTheme.colorScheme.secondary
+                            )
+                        },
                         content = {
-                            Box {
-                                CommonText(
-                                    text = item.name,
-                                    style = MaterialTheme.typography.bodyLarge,
-                                    color = MaterialTheme.colorScheme.onPrimary,
-                                )
-                            }
+                            CommonText(
+                                text = item.name,
+                                style = MaterialTheme.typography.bodyLarge,
+                                color = MaterialTheme.colorScheme.onPrimary,
+                            )
                         },
                     )
                 },

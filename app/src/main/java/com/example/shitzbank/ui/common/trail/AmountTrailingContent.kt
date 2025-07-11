@@ -31,7 +31,10 @@ fun AmountTrailingContent(
             )
         },
         icon = {
-            Icon(ImageVector.vectorResource(R.drawable.drill_in), null)
+            Icon(
+                ImageVector.vectorResource(R.drawable.drill_in),
+                null
+            )
         },
     )
 }

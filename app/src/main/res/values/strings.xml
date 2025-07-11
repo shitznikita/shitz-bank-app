@@ -49,4 +49,9 @@
     <string name="current_balance_name">Текущее название</string>
     <string name="add">Добавить</string>
     <string name="back">Назад</string>
+    <string name="category">Статья</string>
+    <string name="amount">Сумма</string>
+    <string name="date">Дата</string>
+    <string name="time">Время</string>
+    <string name="description">Описание</string>
 </resources>

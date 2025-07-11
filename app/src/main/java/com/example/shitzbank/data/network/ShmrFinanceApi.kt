@@ -59,7 +59,7 @@ interface ShmrFinanceApi {
     ): TransactionResponseDto
 
     @GET("transactions/{id}")
-    suspend fun getTransactionsById(
+    suspend fun getTransactionById(
         @Path("id") id: Int,
     ): TransactionResponseDto
 

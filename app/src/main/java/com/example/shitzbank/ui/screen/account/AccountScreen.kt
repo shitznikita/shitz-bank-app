@@ -27,7 +27,7 @@ fun AccountScreen(viewModel: AccountViewModel = hiltViewModel()) {
     val showEditDialog by viewModel.showEditNameDialog.collectAsState()
     val showCurrencyBottomSheet by viewModel.showCurrencyBottomSheet.collectAsState()
 
-    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    val sheetState = rememberModalBottomSheetState()
     val scope = rememberCoroutineScope()
 
     LaunchedEffect(Unit) {
@@ -72,7 +72,7 @@ fun AccountScreen(viewModel: AccountViewModel = hiltViewModel()) {
         ) {
             CurrencySelectionBottomSheet(
                 onCurrencySelected = { selectedCurrency ->
-                    viewModel.saveCurrencyChanges(selectedCurrency)
+                    viewModel.saveCurrencyChanges(selectedCurrency.code)
                     scope.launch { sheetState.hide() }
                     viewModel.showCurrencyBottomSheet(false)
                 },

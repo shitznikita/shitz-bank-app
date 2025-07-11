@@ -33,4 +33,24 @@ class CategoryRepositoryImpl
                 }
             }
         }
+
+        override suspend fun getCategoriesByType(
+            isIncome: Boolean
+        ): List<Category> {
+            return withContext(coroutineDispatchers.io) {
+                try {
+                    val categoriesDto =
+                        retryWithBackoff {
+                            apiService.getCategoriesByType(isIncome)
+                        }
+                    categoriesDto.map { it.toDomain() }
+                } catch (e: UnknownHostException) {
+                    println("No internet connection or unknown host: ${e.message}")
+                    emptyList()
+                } catch (e: IOException) {
+                    println("Network error: ${e.message}")
+                    emptyList()
+                }
+            }
+        }
     }
