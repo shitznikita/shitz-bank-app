@@ -7,6 +7,7 @@ import com.example.shitzbank.data.dtos.AccountResponseDto
 import com.example.shitzbank.data.dtos.CategoryDto
 import com.example.shitzbank.data.dtos.TransactionRequestDto
 import com.example.shitzbank.data.dtos.TransactionResponseDto
+import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
@@ -72,7 +73,7 @@ interface ShmrFinanceApi {
     @DELETE("transactions/{id}")
     suspend fun deleteTransactionById(
         @Path("id") id: Int
-    ): Boolean
+    ): Response<Unit>
 
     @GET("transactions/account/{accountId}/period")
     suspend fun getTransactionsForPeriod(

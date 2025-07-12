@@ -93,11 +93,11 @@ fun App(viewModel: AppViewModel = hiltViewModel()) {
             ) {
                 composable(expensesRoute) {
                     LaunchedEffect(Unit) { providedTopAppBarAction.value = null }
-                    ExpensesScreen()
+                    ExpensesScreen(navController)
                 }
                 composable(incomesRoute) {
                     LaunchedEffect(Unit) { providedTopAppBarAction.value = null }
-                    IncomesScreen() }
+                    IncomesScreen(navController) }
                 composable(accountRoute) {
                     LaunchedEffect(Unit) { providedTopAppBarAction.value = null }
                     AccountScreen() }
@@ -119,6 +119,20 @@ fun App(viewModel: AppViewModel = hiltViewModel()) {
                     arguments = listOf(
                         navArgument("isIncome") { type = NavType.BoolType },
                         navArgument("id") { type = NavType.IntType }
+                    )
+                ) {
+                    TransactionScreen(
+                        navController = navController,
+                        onSetTopBarAction = { actionConfig ->
+                            providedTopAppBarAction.value = actionConfig
+                        }
+                    )
+                }
+                composable(
+                    route = "transaction/{isIncome}/{isNew}",
+                    arguments = listOf(
+                        navArgument("isIncome") { type = NavType.BoolType },
+                        navArgument("isNew") { type = NavType.BoolType }
                     )
                 ) {
                     TransactionScreen(
@@ -251,14 +265,20 @@ fun AppFloatingActionButton(navController: NavController) {
 
     val currentScreen = getScreen(currentDestination)
 
-    val action = currentScreen.action
+    val navigationRoute: String? = when (currentScreen) {
+        Screen.Expenses -> "transaction/false/true"
+        Screen.Incomes -> "transaction/true/true"
+        else -> null
+    }
 
-    if (currentScreen in screens && action != null) {
+    if (navigationRoute != null) {
         FloatingActionButton(
             containerColor = MaterialTheme.colorScheme.primary,
             contentColor = Color.White,
             modifier = Modifier.clip(CircleShape),
-            onClick = {},
+            onClick = {
+                navController.navigate(navigationRoute)
+            },
         ) {
             Icon(
                 imageVector = Icons.Default.Add,

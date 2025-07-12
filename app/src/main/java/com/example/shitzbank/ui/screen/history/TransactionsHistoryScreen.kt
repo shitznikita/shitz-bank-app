@@ -1,6 +1,7 @@
 package com.example.shitzbank.ui.screen.history
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -29,6 +30,16 @@ fun TransactionsHistoryScreen(
 
     var showStartDatePicker by remember { mutableStateOf(false) }
     var showEndDatePicker by remember { mutableStateOf(false) }
+
+    val navBackStackEntry = navController.currentBackStackEntry
+
+    LaunchedEffect(navBackStackEntry) {
+        val refreshNeeded = navBackStackEntry?.savedStateHandle?.get<Boolean>("refresh_needed")
+        if (refreshNeeded == true) {
+            viewModel.loadTransactions()
+            navBackStackEntry.savedStateHandle["refresh_needed"] = false
+        }
+    }
 
     ResultStateHandler(
         state = transactionsState,

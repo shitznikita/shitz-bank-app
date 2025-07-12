@@ -54,4 +54,8 @@
     <string name="date">Дата</string>
     <string name="time">Время</string>
     <string name="description">Описание</string>
+    <string name="delete_transaction">Удалить транзакцию</string>
+    <string name="delete_transaction_title">Подтверждение удаления</string>
+    <string name="delete_transaction_message">Удалить транзакцию?</string>
+    <string name="delete_transaction_yes">Удалить</string>
 </resources>

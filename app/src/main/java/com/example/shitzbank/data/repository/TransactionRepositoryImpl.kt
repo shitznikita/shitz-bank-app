@@ -3,6 +3,7 @@ package com.example.shitzbank.data.repository
 import com.example.shitzbank.common.CoroutineDispatchers
 import com.example.shitzbank.common.network.retryWithBackoff
 import com.example.shitzbank.common.utils.datetime.toIsoString
+import com.example.shitzbank.common.utils.datetime.toIsoZString
 import com.example.shitzbank.data.dtos.TransactionRequestDto
 import com.example.shitzbank.data.network.ShmrFinanceApi
 import com.example.shitzbank.domain.model.TransactionRequest
@@ -11,6 +12,7 @@ import com.example.shitzbank.domain.repository.TransactionRepository
 import kotlinx.coroutines.withContext
 import okio.IOException
 import java.net.UnknownHostException
+import java.util.Locale
 import javax.inject.Inject
 
 class TransactionRepositoryImpl
@@ -49,8 +51,8 @@ class TransactionRepositoryImpl
                     val requestDto = TransactionRequestDto(
                         accountId = request.accountId,
                         categoryId = request.categoryId,
-                        amount = request.amount,
-                        transactionDate = request.transactionDate.toIsoString(),
+                        amount = String.format(Locale.US, "%.2f", request.amount),
+                        transactionDate = request.transactionDate.toIsoZString(),
                         comment = request.comment
                     )
                     val createdTransactionDto =
@@ -77,8 +79,8 @@ class TransactionRepositoryImpl
                     val requestDto = TransactionRequestDto(
                         accountId = request.accountId,
                         categoryId = request.categoryId,
-                        amount = request.amount,
-                        transactionDate = request.transactionDate.toIsoString(),
+                        amount = String.format(Locale.US, "%.2f", request.amount),
+                        transactionDate = request.transactionDate.toIsoZString(),
                         comment = request.comment
                     )
                     retryWithBackoff {
@@ -119,7 +121,7 @@ class TransactionRepositoryImpl
                     val deleteTransactionResponse = retryWithBackoff {
                         apiService.deleteTransactionById(transactionId)
                     }
-                    deleteTransactionResponse
+                    deleteTransactionResponse.isSuccessful
                 } catch (e: UnknownHostException) {
                     println("No internet connection or unknown host: ${e.message}")
                     false

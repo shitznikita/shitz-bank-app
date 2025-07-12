@@ -78,4 +78,7 @@ dependencies {
     kapt(libs.hilt.compiler)
     implementation(libs.hilt.navigation.compose)
     implementation(libs.kotlinx.datetime)
+    implementation(libs.gson)
+    implementation(libs.retrofit.converter.gson)
+
 }

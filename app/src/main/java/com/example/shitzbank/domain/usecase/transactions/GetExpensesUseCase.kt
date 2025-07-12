@@ -1,6 +1,7 @@
 package com.example.shitzbank.domain.usecase.transactions
 
 import com.example.shitzbank.domain.model.TransactionResponse
+import com.example.shitzbank.domain.repository.CategoryRepository
 import com.example.shitzbank.domain.repository.TransactionRepository
 import javax.inject.Inject
 
@@ -15,6 +16,7 @@ class GetExpensesUseCase
     @Inject
     constructor(
         private val transactionRepository: TransactionRepository,
+        private val categoryRepository: CategoryRepository
     ) {
         /**
          * Выполняет операцию получения списка расходных транзакций.

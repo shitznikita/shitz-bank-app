@@ -9,9 +9,13 @@ import com.example.shitzbank.common.network.NetworkMonitorViewModel
 import com.example.shitzbank.domain.model.Account
 import com.example.shitzbank.domain.model.AccountBrief
 import com.example.shitzbank.domain.model.Category
+import com.example.shitzbank.domain.model.TransactionRequest
 import com.example.shitzbank.domain.usecase.account.GetAllAccountsUseCase
 import com.example.shitzbank.domain.usecase.categories.GetCategoriesByTypeUseCase
+import com.example.shitzbank.domain.usecase.transactions.CreateTransactionUseCase
+import com.example.shitzbank.domain.usecase.transactions.DeleteTransactionByIdUseCase
 import com.example.shitzbank.domain.usecase.transactions.GetTransactionByIdUseCase
+import com.example.shitzbank.domain.usecase.transactions.UpdateTransactionByIdUseCase
 import com.example.shitzbank.ui.screen.transaction.common.sheet.BottomSheetType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,6 +23,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.LocalTime
 import javax.inject.Inject
 
@@ -28,10 +33,13 @@ class TransactionViewModel @Inject constructor(
     private val getTransactionByIdUseCase: GetTransactionByIdUseCase,
     private val getAllAccountsUseCase: GetAllAccountsUseCase,
     private val getCategoriesByTypeUseCase: GetCategoriesByTypeUseCase,
+    private val deleteTransactionByIdUseCase: DeleteTransactionByIdUseCase,
+    private val createTransactionUseCase: CreateTransactionUseCase,
+    private val updateTransactionByIdUseCase: UpdateTransactionByIdUseCase,
     networkMonitor: NetworkMonitor
 ) : NetworkMonitorViewModel(networkMonitor) {
     private val isIncome: Boolean = savedStateHandle.get<Boolean>("isIncome") ?: false
-    private val isNewTransaction: Boolean = savedStateHandle.get<Boolean>("isNew") ?: false
+    val isNewTransaction: Boolean = savedStateHandle.get<Boolean>("isNew") ?: false
     private val transactionId: Int = savedStateHandle.get<Int>("id") ?: -1
 
     private val _transactionState = MutableStateFlow<ResultState<TransactionUiState>>(ResultState.Loading)
@@ -58,6 +66,14 @@ class TransactionViewModel @Inject constructor(
     private val _showTimePicker = MutableStateFlow(false)
     val showTimePicker: StateFlow<Boolean> = _showTimePicker.asStateFlow()
 
+    private val _editableComment = MutableStateFlow("")
+    val editableComment: StateFlow<String> = _editableComment.asStateFlow()
+
+    private val _showEditCommentDialog = MutableStateFlow(false)
+    val showEditCommentDialog: StateFlow<Boolean> = _showEditCommentDialog.asStateFlow()
+
+    private val _showDeleteConfirmationDialog = MutableStateFlow(false)
+    val showDeleteConfirmationDialog: StateFlow<Boolean> = _showDeleteConfirmationDialog.asStateFlow()
 
     init {
         viewModelScope.launch {
@@ -103,22 +119,40 @@ class TransactionViewModel @Inject constructor(
         viewModelScope.launch {
             _transactionState.value = ResultState.Loading
 
-            val transaction = getTransactionByIdUseCase.execute(transactionId)
-            _transactionState.value = ResultState.Success(
-                TransactionUiState(
-                    id = transaction.id,
-                    account = transaction.account,
-                    category = transaction.category,
-                    amount = transaction.amount.toString(),
-                    date = transaction.transactionDate.toLocalDate(),
-                    time = transaction.transactionDate.toLocalTime(),
-                    comment = transaction.comment,
-                    isIncome = isIncome,
-                    isNewTransaction = isNewTransaction
+            if (isNewTransaction) {
+                _transactionState.value = ResultState.Success(
+                    TransactionUiState(
+                        id = -1,
+                        account = null,
+                        category = null,
+                        amount = "",
+                        date = LocalDate.now(),
+                        time = LocalTime.now(),
+                        comment = null,
+                        isIncome = isIncome,
+                        isNewTransaction = true
+                    )
                 )
-            )
-
-            _editableAmount.value = transaction.amount.toString()
+                _editableAmount.value = ""
+                _editableComment.value = ""
+            } else {
+                val transaction = getTransactionByIdUseCase.execute(transactionId)
+                _transactionState.value = ResultState.Success(
+                    TransactionUiState(
+                        id = transaction.id,
+                        account = transaction.account,
+                        category = transaction.category,
+                        amount = transaction.amount.toString(),
+                        date = transaction.transactionDate.toLocalDate(),
+                        time = transaction.transactionDate.toLocalTime(),
+                        comment = transaction.comment,
+                        isIncome = isIncome,
+                        isNewTransaction = isNewTransaction
+                    )
+                )
+                _editableAmount.value = transaction.amount.toString()
+                _editableComment.value = transaction.comment ?: ""
+            }
         }
     }
 
@@ -144,7 +178,7 @@ class TransactionViewModel @Inject constructor(
 
     fun onAccountSelected(account: AccountBrief) {
         updateUiState {
-            it.copy(account = account,)
+            it.copy(account = account)
         }
         dismissBottomSheet()
     }
@@ -199,17 +233,83 @@ class TransactionViewModel @Inject constructor(
         _showTimePicker.value = false
     }
 
+    fun showEditCommentDialog(show: Boolean) {
+        _showEditCommentDialog.value = show
+        if (show) {
+            val currentComment = (_transactionState.value as? ResultState.Success)?.data?.comment ?: ""
+            _editableComment.value = currentComment
+        }
+    }
+
     fun onCommentChanged(newComment: String) {
-        updateUiState { it.copy(comment = newComment) }
+        _editableComment.value = newComment
     }
 
-    fun showDeleteConfirmationDialog() {
-        updateUiState { it.copy(showDeleteDialog = true) }
+    fun saveCommentChanges() {
+        viewModelScope.launch {
+            updateUiState { it.copy(comment = _editableComment.value.ifBlank { null }) }
+            _showEditCommentDialog.value = false
+        }
     }
 
-    fun dismissDeleteConfirmationDialog() {
-        updateUiState { it.copy(showDeleteDialog = false) }
+    fun showDeleteConfirmationDialog(show: Boolean) {
+        _showDeleteConfirmationDialog.value = show
     }
 
-    fun saveTransaction() {}
+    fun deleteTransaction(onSuccess: () -> Unit) {
+        viewModelScope.launch {
+            _showDeleteConfirmationDialog.value = false
+            val currentTransactionData = (_transactionState.value as? ResultState.Success)?.data
+
+            val transactionId = currentTransactionData?.id
+            if (transactionId != null && transactionId != -1) {
+                val success = deleteTransactionByIdUseCase.execute(transactionId)
+                if (success) {
+                    onSuccess()
+                }
+            }
+        }
+    }
+
+    fun saveTransaction(onSuccess: () -> Unit) {
+        viewModelScope.launch {
+            val currentTransactionData = (_transactionState.value as? ResultState.Success)?.data
+            if (currentTransactionData == null) {
+                return@launch
+            }
+
+            if (currentTransactionData.account == null ||
+                currentTransactionData.category == null ||
+                currentTransactionData.amount.isNullOrBlank() ||
+                (currentTransactionData.amount.replace(',', '.').toDoubleOrNull() ?: 0.0) <= 0
+            ) {
+                return@launch
+            }
+
+            val request = TransactionRequest(
+                accountId = currentTransactionData.account.id,
+                categoryId = currentTransactionData.category.id,
+                amount = currentTransactionData.amount.replace(',', '.').toDouble(),
+                transactionDate = LocalDateTime.of(
+                    currentTransactionData.date,
+                    currentTransactionData.time
+                ),
+                comment = currentTransactionData.comment ?: ""
+            )
+
+            val success = if (isNewTransaction) {
+                createTransactionUseCase.execute(request) != null
+            } else {
+                updateTransactionByIdUseCase.execute(transactionId, request)
+                true
+            }
+
+            if (success) {
+                onSuccess()
+            }
+        }
+    }
 }
+
+
+

@@ -1,17 +1,13 @@
 package com.example.shitzbank.ui.screen.transaction.common
 
-import android.app.TimePickerDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TimePicker
+import androidx.compose.material3.TimePickerDefaults
 import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.res.stringResource
-import com.example.shitzbank.R
 import java.time.LocalTime
-import androidx.compose.material3.TextButton
-import com.example.shitzbank.ui.common.composable.CommonText
-import androidx.compose.material3.TimePickerDialog
+import com.example.shitzbank.ui.common.composable.CustomTimePickerDialog
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -26,31 +22,28 @@ fun TransactionTimePicker(
         is24Hour = true
     )
 
-    TimePickerDialog(
-        onDismissRequest = onDismiss,
-        confirmButton = {
-            TextButton(onClick = {
-                onTimeSelected(
-                    LocalTime.of(timePickerState.hour, timePickerState.minute)
-                )
-            }) {
-                CommonText(
-                    text = stringResource(R.string.ok),
-                    color = MaterialTheme.colorScheme.onPrimary,
-                    style = MaterialTheme.typography.bodyMedium,
-                )
-            }
-        },
-        dismissButton = {
-            TextButton(onClick = onDismiss) {
-                CommonText(
-                    text = stringResource(R.string.cancel),
-                    color = MaterialTheme.colorScheme.onPrimary,
-                    style = MaterialTheme.typography.bodyMedium,
-                )
-            }
+    CustomTimePickerDialog(
+        onDismiss = onDismiss,
+        onConfirm = {
+            onTimeSelected(
+                LocalTime.of(timePickerState.hour, timePickerState.minute)
+            )
         }
     ) {
-        TimePicker(state = timePickerState)
+        TimePicker(
+            state = timePickerState,
+            colors = TimePickerDefaults.colors(
+                containerColor = MaterialTheme.colorScheme.secondary,
+                clockDialColor = MaterialTheme.colorScheme.surfaceVariant,
+                selectorColor = MaterialTheme.colorScheme.primary,
+                timeSelectorSelectedContentColor = MaterialTheme.colorScheme.onPrimary,
+                timeSelectorUnselectedContentColor = MaterialTheme.colorScheme.onSurface,
+                timeSelectorSelectedContainerColor = MaterialTheme.colorScheme.primary,
+                periodSelectorSelectedContainerColor = MaterialTheme.colorScheme.secondary,
+                periodSelectorSelectedContentColor = MaterialTheme.colorScheme.onPrimary,
+                periodSelectorUnselectedContainerColor = MaterialTheme.colorScheme.secondaryContainer,
+                periodSelectorUnselectedContentColor = MaterialTheme.colorScheme.onSurface
+            )
+        )
     }
 }
