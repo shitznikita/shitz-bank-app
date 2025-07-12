@@ -68,7 +68,7 @@ class TransactionsHistoryViewModel
             loadTransactions()
         }
 
-        private fun loadTransactions() {
+        fun loadTransactions() {
             viewModelScope.launch {
                 if (networkStatus.value is ConnectionStatus.Unavailable) {
                     return@launch

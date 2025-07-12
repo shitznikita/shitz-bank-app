@@ -12,7 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.stringResource
 import com.example.shitzbank.R
-import com.example.shitzbank.ui.common.CommonText
+import com.example.shitzbank.ui.common.composable.CommonText
 
 @Composable
 fun SearchInput(

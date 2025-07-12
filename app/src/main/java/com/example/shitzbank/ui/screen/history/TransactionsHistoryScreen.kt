@@ -1,21 +1,27 @@
 package com.example.shitzbank.ui.screen.history
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.shitzbank.ui.common.CommonLazyColumn
-import com.example.shitzbank.ui.common.ResultStateHandler
+import androidx.navigation.NavController
+import com.example.shitzbank.ui.common.composable.CommonLazyColumn
+import com.example.shitzbank.ui.common.composable.ResultStateHandler
 import com.example.shitzbank.ui.screen.history.common.EndDatePicker
 import com.example.shitzbank.ui.screen.history.common.StartDatePicker
 import com.example.shitzbank.ui.screen.history.common.TransactionsHistoryHeader
 import com.example.shitzbank.ui.screen.history.common.TransactionsHistoryItemTemplate
 
 @Composable
-fun TransactionsHistoryScreen(viewModel: TransactionsHistoryViewModel = hiltViewModel()) {
+fun TransactionsHistoryScreen(
+    navController: NavController,
+    viewModel: TransactionsHistoryViewModel = hiltViewModel()
+) {
     val transactionsState by viewModel.transactionsState.collectAsState()
     val total by viewModel.total.collectAsState()
     val startDate by viewModel.startDate.collectAsState()
@@ -24,6 +30,16 @@ fun TransactionsHistoryScreen(viewModel: TransactionsHistoryViewModel = hiltView
 
     var showStartDatePicker by remember { mutableStateOf(false) }
     var showEndDatePicker by remember { mutableStateOf(false) }
+
+    val navBackStackEntry = navController.currentBackStackEntry
+
+    LaunchedEffect(navBackStackEntry) {
+        val refreshNeeded = navBackStackEntry?.savedStateHandle?.get<Boolean>("refresh_needed")
+        if (refreshNeeded == true) {
+            viewModel.loadTransactions()
+            navBackStackEntry.savedStateHandle["refresh_needed"] = false
+        }
+    }
 
     ResultStateHandler(
         state = transactionsState,
@@ -41,7 +57,14 @@ fun TransactionsHistoryScreen(viewModel: TransactionsHistoryViewModel = hiltView
                 },
                 itemsList = data,
                 itemTemplate = { item ->
-                    TransactionsHistoryItemTemplate(item)
+                    TransactionsHistoryItemTemplate(
+                        item = item,
+                        onItemClick = {
+                            val isIncome = it.category.isIncome
+                            val id = it.id
+                            navController.navigate("transaction/$isIncome/$id")
+                        }
+                    )
                 },
             )
         },

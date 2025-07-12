@@ -1,4 +1,4 @@
-package com.example.shitzbank.ui.common
+package com.example.shitzbank.ui.common.composable
 
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -11,7 +11,7 @@ import androidx.compose.ui.text.style.TextOverflow
 /**
  * Универсальная Composable-функция для отображения текста с общими настройками стиля и поведения.
  *
- * Эта обертка над [androidx.compose.material3.Text] предоставляет удобный способ
+ * Эта обертка над [Text] предоставляет удобный способ
  * применять часто используемые параметры текста, такие как цвет, стиль, максимальное количество строк
  * и обработка переполнения.
  *

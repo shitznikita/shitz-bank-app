@@ -7,7 +7,9 @@ import com.example.shitzbank.data.dtos.AccountResponseDto
 import com.example.shitzbank.data.dtos.CategoryDto
 import com.example.shitzbank.data.dtos.TransactionRequestDto
 import com.example.shitzbank.data.dtos.TransactionResponseDto
+import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.PUT
@@ -33,11 +35,11 @@ interface ShmrFinanceApi {
         @Path("id") id: Int,
         @Body request: AccountCreateRequestDto
     ): AccountDto
-//
-//    @DELETE("accounts/{id}")
-//    suspend fun deleteAccountById(
-//        @Path("id") id: Int
-//    ): Boolean
+
+    @DELETE("accounts/{id}")
+    suspend fun deleteAccountById(
+        @Path("id") id: Int
+    ): Boolean
 
     @GET("accounts/{id}/history")
     suspend fun getAccountHistory(
@@ -58,20 +60,20 @@ interface ShmrFinanceApi {
     ): TransactionResponseDto
 
     @GET("transactions/{id}")
-    suspend fun getTransactionsById(
+    suspend fun getTransactionById(
         @Path("id") id: Int,
     ): TransactionResponseDto
 
-//    @PUT("transactions/{id}")
-//    suspend fun updateTransactionById(
-//        @Path("id") id: Int,
-//        @Body request: TransactionRequestDto
-//    )
-//
-//    @DELETE("transactions/{id}")
-//    suspend fun deleteTransactionById(
-//        @Path("id") id: Int
-//    ): Boolean
+    @PUT("transactions/{id}")
+    suspend fun updateTransactionById(
+        @Path("id") id: Int,
+        @Body request: TransactionRequestDto
+    )
+
+    @DELETE("transactions/{id}")
+    suspend fun deleteTransactionById(
+        @Path("id") id: Int
+    ): Response<Unit>
 
     @GET("transactions/account/{accountId}/period")
     suspend fun getTransactionsForPeriod(

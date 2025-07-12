@@ -11,8 +11,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.shitzbank.ui.common.CommonLazyColumn
-import com.example.shitzbank.ui.common.ResultStateHandler
+import com.example.shitzbank.ui.common.composable.CommonLazyColumn
+import com.example.shitzbank.ui.common.composable.ResultStateHandler
 import com.example.shitzbank.ui.screen.account.common.AccountNameListItem
 import com.example.shitzbank.ui.screen.account.common.CurrencyAccountListItem
 import com.example.shitzbank.ui.screen.account.common.CurrencySelectionBottomSheet
@@ -27,7 +27,7 @@ fun AccountScreen(viewModel: AccountViewModel = hiltViewModel()) {
     val showEditDialog by viewModel.showEditNameDialog.collectAsState()
     val showCurrencyBottomSheet by viewModel.showCurrencyBottomSheet.collectAsState()
 
-    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    val sheetState = rememberModalBottomSheetState()
     val scope = rememberCoroutineScope()
 
     LaunchedEffect(Unit) {
@@ -72,7 +72,7 @@ fun AccountScreen(viewModel: AccountViewModel = hiltViewModel()) {
         ) {
             CurrencySelectionBottomSheet(
                 onCurrencySelected = { selectedCurrency ->
-                    viewModel.saveCurrencyChanges(selectedCurrency)
+                    viewModel.saveCurrencyChanges(selectedCurrency.code)
                     scope.launch { sheetState.hide() }
                     viewModel.showCurrencyBottomSheet(false)
                 },

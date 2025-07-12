@@ -1,4 +1,4 @@
-package com.example.shitzbank.ui.common
+package com.example.shitzbank.ui.common.composable
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.lazy.LazyColumn

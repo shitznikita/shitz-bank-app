@@ -21,4 +21,13 @@ data class Account(
     val currency: String,
     val createdAt: LocalDateTime,
     val updatedAt: LocalDateTime,
-)
+) {
+    fun toBrief(): AccountBrief {
+        return AccountBrief(
+            id = this.id,
+            name = this.name,
+            balance = this.balance,
+            currency = this.currency
+        )
+    }
+}

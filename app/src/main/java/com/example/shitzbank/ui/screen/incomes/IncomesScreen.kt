@@ -10,21 +10,35 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import com.example.shitzbank.ui.common.trail.AmountTrailingContent
-import com.example.shitzbank.ui.common.CommonLazyColumn
-import com.example.shitzbank.ui.common.CommonListItem
-import com.example.shitzbank.ui.common.CommonText
-import com.example.shitzbank.ui.common.ResultStateHandler
+import com.example.shitzbank.ui.common.composable.CommonLazyColumn
+import com.example.shitzbank.ui.common.composable.CommonListItem
+import com.example.shitzbank.ui.common.composable.CommonText
+import com.example.shitzbank.ui.common.composable.ResultStateHandler
 import com.example.shitzbank.ui.common.list.TotalAmountListItem
 
 @Composable
-fun IncomesScreen(viewModel: IncomesViewModel = hiltViewModel()) {
+fun IncomesScreen(
+    navController: NavController,
+    viewModel: IncomesViewModel = hiltViewModel()
+) {
     val state by viewModel.incomesState.collectAsState()
     val totalIncome by viewModel.totalIncome.collectAsState()
     val currency by viewModel.accountCurrency.collectAsState()
 
     LaunchedEffect(Unit) {
         viewModel.loadIncomes()
+    }
+
+    val navBackStackEntry = navController.currentBackStackEntry
+
+    LaunchedEffect(navBackStackEntry) {
+        val refreshNeeded = navBackStackEntry?.savedStateHandle?.get<Boolean>("refresh_needed")
+        if (refreshNeeded == true) {
+            viewModel.loadIncomes()
+            navBackStackEntry.savedStateHandle["refresh_needed"] = false
+        }
     }
 
     ResultStateHandler(
@@ -42,7 +56,11 @@ fun IncomesScreen(viewModel: IncomesViewModel = hiltViewModel()) {
                     CommonListItem(
                         modifier =
                             Modifier.height(68.dp)
-                                .clickable { },
+                                .clickable {
+                                    val isIncome = item.category.isIncome
+                                    val id = item.id
+                                    navController.navigate("transaction/$isIncome/$id")
+                                },
                         content = {
                             CommonText(
                                 text = item.category.name,

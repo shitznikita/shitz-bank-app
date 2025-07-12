@@ -5,8 +5,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import com.example.shitzbank.R
-import com.example.shitzbank.ui.common.PriceDisplay
-import com.example.shitzbank.ui.common.TrailingContent
+import com.example.shitzbank.ui.common.composable.PriceDisplay
+import com.example.shitzbank.ui.common.composable.TrailingContent
 
 /**
  * Composable-функция, предназначенная для отображения суммы и валюты
@@ -31,7 +31,10 @@ fun AmountTrailingContent(
             )
         },
         icon = {
-            Icon(ImageVector.vectorResource(R.drawable.drill_in), null)
+            Icon(
+                ImageVector.vectorResource(R.drawable.drill_in),
+                null
+            )
         },
     )
 }

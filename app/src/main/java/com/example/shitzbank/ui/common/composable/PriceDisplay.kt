@@ -1,4 +1,4 @@
-package com.example.shitzbank.ui.common
+package com.example.shitzbank.ui.common.composable
 
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable

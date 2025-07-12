@@ -17,4 +17,8 @@ interface CategoryRepository {
      * @throws Exception Может выбросить исключение в случае ошибки получения категорий (например, сетевой ошибки).
      */
     suspend fun getCategories(): List<Category>
+
+    suspend fun getCategoriesByType(
+        isIncome: Boolean
+    ): List<Category>
 }

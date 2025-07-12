@@ -4,9 +4,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import com.example.shitzbank.R
-import com.example.shitzbank.ui.common.CommonListItem
-import com.example.shitzbank.ui.common.CommonText
-import com.example.shitzbank.ui.common.PriceDisplay
+import com.example.shitzbank.ui.common.composable.CommonListItem
+import com.example.shitzbank.ui.common.composable.CommonText
+import com.example.shitzbank.ui.common.composable.PriceDisplay
 
 /**
  * Composable-функция, отображающая элемент списка для суммирования итоговой суммы.

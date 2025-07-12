@@ -19,8 +19,10 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -35,17 +37,20 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.shitzbank.common.network.ConnectionStatus
-import com.example.shitzbank.ui.common.CommonText
+import com.example.shitzbank.ui.common.composable.CommonText
 import com.example.shitzbank.ui.navigation.Screen
-import com.example.shitzbank.ui.navigation.currentRouteAsState
+import com.example.shitzbank.ui.navigation.utils.currentRouteAsState
 import com.example.shitzbank.ui.navigation.getScreen
 import com.example.shitzbank.ui.navigation.screens
+import com.example.shitzbank.ui.navigation.utils.ActionConfig
+import com.example.shitzbank.ui.navigation.utils.LocalTopAppBarAction
 import com.example.shitzbank.ui.screen.account.AccountScreen
 import com.example.shitzbank.ui.screen.categories.CategoriesScreen
 import com.example.shitzbank.ui.screen.expenses.ExpensesScreen
 import com.example.shitzbank.ui.screen.history.TransactionsHistoryScreen
 import com.example.shitzbank.ui.screen.incomes.IncomesScreen
 import com.example.shitzbank.ui.screen.settings.SettingsScreen
+import com.example.shitzbank.ui.screen.transaction.TransactionScreen
 
 @Composable
 fun App(viewModel: AppViewModel = hiltViewModel()) {
@@ -66,32 +71,78 @@ fun App(viewModel: AppViewModel = hiltViewModel()) {
         }
     }
 
-    Scaffold(
-        snackbarHost = { SnackbarHost(hostState) },
-        topBar = { AppTopBar(navController) },
-        bottomBar = { AppBottomNavigationBar(navController) },
-        floatingActionButton = { AppFloatingActionButton(navController) },
-    ) { innerPadding ->
-        val expensesRoute = Screen.Expenses.getRoute()
-        val incomesRoute = Screen.Incomes.getRoute()
-        val accountRoute = Screen.Account.getRoute()
-        val categoriesRoute = Screen.Categories.getRoute()
-        val settingsRoute = Screen.Settings.getRoute()
+    val providedTopAppBarAction = remember { mutableStateOf<ActionConfig?>(null) }
 
-        NavHost(
-            navController = navController,
-            startDestination = stringResource(Screen.Expenses.routeResId),
-            modifier = Modifier.padding(innerPadding),
-        ) {
-            composable(expensesRoute) { ExpensesScreen() }
-            composable(incomesRoute) { IncomesScreen() }
-            composable(accountRoute) { AccountScreen() }
-            composable(categoriesRoute) { CategoriesScreen() }
-            composable(settingsRoute) { SettingsScreen() }
-            composable(
-                route = "history/{isIncome}",
-                arguments = listOf(navArgument("isIncome") { type = NavType.BoolType }),
-            ) { TransactionsHistoryScreen() }
+    CompositionLocalProvider(LocalTopAppBarAction provides providedTopAppBarAction.value) {
+        Scaffold(
+            snackbarHost = { SnackbarHost(hostState) },
+            topBar = { AppTopBar(navController) },
+            bottomBar = { AppBottomNavigationBar(navController) },
+            floatingActionButton = { AppFloatingActionButton(navController) },
+        ) { innerPadding ->
+            val expensesRoute = Screen.Expenses.getRoute()
+            val incomesRoute = Screen.Incomes.getRoute()
+            val accountRoute = Screen.Account.getRoute()
+            val categoriesRoute = Screen.Categories.getRoute()
+            val settingsRoute = Screen.Settings.getRoute()
+
+            NavHost(
+                navController = navController,
+                startDestination = stringResource(Screen.Expenses.routeResId),
+                modifier = Modifier.padding(innerPadding),
+            ) {
+                composable(expensesRoute) {
+                    LaunchedEffect(Unit) { providedTopAppBarAction.value = null }
+                    ExpensesScreen(navController)
+                }
+                composable(incomesRoute) {
+                    LaunchedEffect(Unit) { providedTopAppBarAction.value = null }
+                    IncomesScreen(navController) }
+                composable(accountRoute) {
+                    LaunchedEffect(Unit) { providedTopAppBarAction.value = null }
+                    AccountScreen() }
+                composable(categoriesRoute) {
+                    LaunchedEffect(Unit) { providedTopAppBarAction.value = null }
+                    CategoriesScreen() }
+                composable(settingsRoute) {
+                    LaunchedEffect(Unit) { providedTopAppBarAction.value = null }
+                    SettingsScreen() }
+                composable(
+                    route = "history/{isIncome}",
+                    arguments = listOf(navArgument("isIncome") { type = NavType.BoolType }),
+                ) {
+                    LaunchedEffect(Unit) { providedTopAppBarAction.value = null }
+                    TransactionsHistoryScreen(navController = navController)
+                }
+                composable(
+                    route = "transaction/{isIncome}/{id}",
+                    arguments = listOf(
+                        navArgument("isIncome") { type = NavType.BoolType },
+                        navArgument("id") { type = NavType.IntType }
+                    )
+                ) {
+                    TransactionScreen(
+                        navController = navController,
+                        onSetTopBarAction = { actionConfig ->
+                            providedTopAppBarAction.value = actionConfig
+                        }
+                    )
+                }
+                composable(
+                    route = "transaction/{isIncome}/{isNew}",
+                    arguments = listOf(
+                        navArgument("isIncome") { type = NavType.BoolType },
+                        navArgument("isNew") { type = NavType.BoolType }
+                    )
+                ) {
+                    TransactionScreen(
+                        navController = navController,
+                        onSetTopBarAction = { actionConfig ->
+                            providedTopAppBarAction.value = actionConfig
+                        }
+                    )
+                }
+            }
         }
     }
 }
@@ -104,7 +155,8 @@ fun AppTopBar(navController: NavController) {
     val currentScreen = getScreen(currentDestination)
 
     val title = currentScreen.getTitle()
-    val action = currentScreen.action
+    val defaultAction = currentScreen.action
+    val customAction = LocalTopAppBarAction.current
     val backNavigation = currentScreen.backNavigationIcon
 
     CenterAlignedTopAppBar(
@@ -126,13 +178,21 @@ fun AppTopBar(navController: NavController) {
             }
         },
         actions = {
-            if (action != null) {
-                val actionRoute = action.getRoute()
-                val actionIcon = action.getIcon()
+            val action: ActionConfig? = customAction ?: run {
+                defaultAction?.let {
+                    val actionRoute = it.getRoute()
+                    val actionIcon = it.getIcon()
+                    ActionConfig(
+                        onClick = { navController.navigate(actionRoute) },
+                        icon = actionIcon
+                    )
+                }
+            }
 
-                IconButton(onClick = { navController.navigate(actionRoute) }) {
+            if (action != null) {
+                IconButton(onClick = action.onClick) {
                     Icon(
-                        imageVector = actionIcon,
+                        imageVector = action.icon,
                         contentDescription = title,
                     )
                 }
@@ -205,16 +265,25 @@ fun AppFloatingActionButton(navController: NavController) {
 
     val currentScreen = getScreen(currentDestination)
 
-    val action = currentScreen.action
+    val navigationRoute: String? = when (currentScreen) {
+        Screen.Expenses -> "transaction/false/true"
+        Screen.Incomes -> "transaction/true/true"
+        else -> null
+    }
 
-    if (currentScreen in screens && action != null) {
+    if (navigationRoute != null) {
         FloatingActionButton(
             containerColor = MaterialTheme.colorScheme.primary,
             contentColor = Color.White,
             modifier = Modifier.clip(CircleShape),
-            onClick = {},
+            onClick = {
+                navController.navigate(navigationRoute)
+            },
         ) {
-            Icon(Icons.Default.Add, contentDescription = "Add")
+            Icon(
+                imageVector = Icons.Default.Add,
+                contentDescription = stringResource(R.string.add)
+            )
         }
     }
 }
@@ -235,7 +304,7 @@ fun AppNavigationIcon(navController: NavController) {
         ) {
             Icon(
                 imageVector = backNavigationIcon,
-                contentDescription = null,
+                contentDescription = stringResource(R.string.back)
             )
         }
     }

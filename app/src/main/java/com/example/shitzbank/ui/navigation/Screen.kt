@@ -1,9 +1,7 @@
 package com.example.shitzbank.ui.navigation
 
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.res.vectorResource
 import com.example.shitzbank.R
 
 /**
@@ -48,7 +46,10 @@ sealed class Screen(
         titleResId = R.string.expenses_header,
         action = ActionIcon.ExpensesAction,
         bottomNavigationIcon = BottomNavigationIcon.ExpensesIcon,
-        relatedRoutesResIds = listOf(R.string.expenses_history_route),
+        relatedRoutesResIds = listOf(
+            R.string.expenses_history_route,
+            R.string.expense_route
+        )
     )
 
     /**
@@ -59,7 +60,10 @@ sealed class Screen(
         titleResId = R.string.incomes_header,
         action = ActionIcon.IncomesAction,
         bottomNavigationIcon = BottomNavigationIcon.IncomesIcon,
-        relatedRoutesResIds = listOf(R.string.incomes_history_route),
+        relatedRoutesResIds = listOf(
+            R.string.incomes_history_route,
+            R.string.income_route
+        )
     )
 
     /**
@@ -109,6 +113,20 @@ sealed class Screen(
         action = ActionIcon.IncomesHistoryAction,
         backNavigationIcon = BackNavigationIcon.IncomesHistoryBack,
     )
+
+    data object Expense : Screen(
+        routeResId = R.string.expense_route,
+        titleResId = R.string.expense_header,
+        action = ActionIcon.ExpenseAction,
+        backNavigationIcon = BackNavigationIcon.ExpenseClose
+    )
+
+    data object Income : Screen(
+        routeResId = R.string.income_route,
+        titleResId = R.string.income_header,
+        action = ActionIcon.IncomeAction,
+        backNavigationIcon = BackNavigationIcon.IncomeClose
+    )
 }
 
 /**
@@ -126,6 +144,8 @@ fun getScreen(route: String): Screen {
         "settings" -> Screen.Settings
         "history/false" -> Screen.ExpensesHistory // Маршрут для истории расходов
         "history/true" -> Screen.IncomesHistory // Маршрут для истории доходов
+        "transaction/false/" -> Screen.Expense
+        "transaction/true/" -> Screen.Income
         else -> Screen.Expenses // Маршрут по умолчанию
     }
 }

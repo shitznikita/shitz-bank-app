@@ -13,11 +13,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.shitzbank.ui.common.CommonLazyColumn
-import com.example.shitzbank.ui.common.CommonListItem
-import com.example.shitzbank.ui.common.CommonText
-import com.example.shitzbank.ui.common.LeadIcon
-import com.example.shitzbank.ui.common.ResultStateHandler
+import com.example.shitzbank.ui.common.composable.CommonLazyColumn
+import com.example.shitzbank.ui.common.composable.CommonListItem
+import com.example.shitzbank.ui.common.composable.CommonText
+import com.example.shitzbank.ui.common.composable.LeadIcon
+import com.example.shitzbank.ui.common.composable.ResultStateHandler
 import com.example.shitzbank.ui.screen.categories.common.SearchInput
 
 @Composable
@@ -47,15 +47,18 @@ fun CategoriesScreen(viewModel: CategoriesViewModel = hiltViewModel()) {
                 itemTemplate = { item ->
                     CommonListItem(
                         modifier = Modifier.height(70.dp).clickable { },
-                        lead = { LeadIcon(label = item.emoji, backgroundColor = MaterialTheme.colorScheme.secondary) },
+                        lead = {
+                            LeadIcon(
+                                label = item.emoji,
+                                backgroundColor = MaterialTheme.colorScheme.secondary
+                            )
+                        },
                         content = {
-                            Box {
-                                CommonText(
-                                    text = item.name,
-                                    style = MaterialTheme.typography.bodyLarge,
-                                    color = MaterialTheme.colorScheme.onPrimary,
-                                )
-                            }
+                            CommonText(
+                                text = item.name,
+                                style = MaterialTheme.typography.bodyLarge,
+                                color = MaterialTheme.colorScheme.onPrimary,
+                            )
                         },
                     )
                 },

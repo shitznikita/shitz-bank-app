@@ -8,6 +8,8 @@
     <string name="settings_route">settings</string>
     <string name="expenses_history_route">history/false</string>
     <string name="incomes_history_route">history/true</string>
+    <string name="expense_route">transaction/false/</string>
+    <string name="income_route">transaction/true/</string>
     
     <string name="expenses_header">Расходы сегодня</string>
     <string name="expenses_icon">Расходы</string>
@@ -20,6 +22,8 @@
     <string name="settings_header">Настройки</string>
     <string name="settings_icon">Настройки</string>
     <string name="history_header">Моя история</string>
+    <string name="expense_header">Мои расходы</string>
+    <string name="income_header">Мои доходы</string>
 
     <string name="settings_dark_theme">Тёмная тема</string>
     <string name="settings_main_color">Основной цвет</string>
@@ -43,4 +47,15 @@
     <string name="no_internet">Отсутствует подключение к интернету</string>
     <string name="balance_name">Название счёта</string>
     <string name="current_balance_name">Текущее название</string>
+    <string name="add">Добавить</string>
+    <string name="back">Назад</string>
+    <string name="category">Статья</string>
+    <string name="amount">Сумма</string>
+    <string name="date">Дата</string>
+    <string name="time">Время</string>
+    <string name="description">Описание</string>
+    <string name="delete_transaction">Удалить транзакцию</string>
+    <string name="delete_transaction_title">Подтверждение удаления</string>
+    <string name="delete_transaction_message">Удалить транзакцию?</string>
+    <string name="delete_transaction_yes">Удалить</string>
 </resources>

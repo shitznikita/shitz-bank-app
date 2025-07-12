@@ -7,8 +7,8 @@ import androidx.compose.material3.SwitchDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.example.shitzbank.ui.common.CommonListItem
-import com.example.shitzbank.ui.common.CommonText
+import com.example.shitzbank.ui.common.composable.CommonListItem
+import com.example.shitzbank.ui.common.composable.CommonText
 import com.example.shitzbank.ui.screen.settings.SettingsViewModel
 
 @Composable

@@ -27,6 +27,7 @@ private val LightColorScheme =
         onSecondary = TextGray,
         onBackground = TextBlack,
         onSurface = TextGray,
+        onError = SurfaceWhite,
         error = DeleteButton,
         outlineVariant = DividerGrey,
         surfaceContainer = ContainerHighGrey,

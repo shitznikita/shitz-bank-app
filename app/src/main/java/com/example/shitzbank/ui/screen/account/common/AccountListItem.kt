@@ -5,7 +5,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.example.shitzbank.ui.common.CommonListItem
+import com.example.shitzbank.ui.common.composable.CommonListItem
 
 @Composable
 fun AccountListItem(
