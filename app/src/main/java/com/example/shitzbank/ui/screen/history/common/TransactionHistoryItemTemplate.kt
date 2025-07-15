@@ -1,9 +1,11 @@
 package com.example.shitzbank.ui.screen.history.common
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.height
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import com.example.shitzbank.domain.model.TransactionResponse
 import com.example.shitzbank.ui.common.composable.CommonListItem
 import com.example.shitzbank.ui.common.composable.CommonText
@@ -18,7 +20,8 @@ fun TransactionsHistoryItemTemplate(
     CommonListItem(
         modifier = Modifier.clickable {
             onItemClick(item)
-        },
+        }
+            .height(68.dp),
         lead = {
             LeadIcon(
                 label = item.category.emoji,

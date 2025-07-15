@@ -5,6 +5,7 @@ import com.example.shitzbank.data.dtos.AccountDto
 import com.example.shitzbank.data.dtos.AccountHistoryResponseDto
 import com.example.shitzbank.data.dtos.AccountResponseDto
 import com.example.shitzbank.data.dtos.CategoryDto
+import com.example.shitzbank.data.dtos.TransactionDto
 import com.example.shitzbank.data.dtos.TransactionRequestDto
 import com.example.shitzbank.data.dtos.TransactionResponseDto
 import retrofit2.Response
@@ -57,7 +58,7 @@ interface ShmrFinanceApi {
     @POST("transactions")
     suspend fun createTransaction(
         @Body request: TransactionRequestDto,
-    ): TransactionResponseDto
+    ): TransactionDto
 
     @GET("transactions/{id}")
     suspend fun getTransactionById(
@@ -68,7 +69,7 @@ interface ShmrFinanceApi {
     suspend fun updateTransactionById(
         @Path("id") id: Int,
         @Body request: TransactionRequestDto
-    )
+    ): TransactionResponseDto
 
     @DELETE("transactions/{id}")
     suspend fun deleteTransactionById(

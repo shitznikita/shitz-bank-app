@@ -15,6 +15,7 @@ import com.example.shitzbank.ui.common.trail.AmountTrailingContent
 import com.example.shitzbank.ui.common.composable.CommonLazyColumn
 import com.example.shitzbank.ui.common.composable.CommonListItem
 import com.example.shitzbank.ui.common.composable.CommonText
+import com.example.shitzbank.ui.common.composable.LeadIcon
 import com.example.shitzbank.ui.common.composable.ResultStateHandler
 import com.example.shitzbank.ui.common.list.TotalAmountListItem
 
@@ -61,6 +62,12 @@ fun IncomesScreen(
                                     val id = item.id
                                     navController.navigate("transaction/$isIncome/$id")
                                 },
+                        lead = {
+                            LeadIcon(
+                                label = item.category.emoji,
+                                backgroundColor = MaterialTheme.colorScheme.secondary,
+                            )
+                        },
                         content = {
                             CommonText(
                                 text = item.category.name,
@@ -68,6 +75,18 @@ fun IncomesScreen(
                                 color = MaterialTheme.colorScheme.onPrimary,
                             )
                         },
+                        supportingContent =
+                            if (item.comment != null) {
+                                {
+                                    CommonText(
+                                        text = item.comment,
+                                        style = MaterialTheme.typography.bodyMedium,
+                                        color = MaterialTheme.colorScheme.onSecondary,
+                                    )
+                                }
+                            } else {
+                                null
+                            },
                         trail = {
                             AmountTrailingContent(item.amount, item.account.currency)
                         },
