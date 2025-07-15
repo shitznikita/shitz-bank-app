@@ -1,7 +1,7 @@
 package com.example.shitzbank.domain.usecase.transactions
 
+import com.example.shitzbank.domain.model.Transaction
 import com.example.shitzbank.domain.model.TransactionRequest
-import com.example.shitzbank.domain.model.TransactionResponse
 import com.example.shitzbank.domain.repository.TransactionRepository
 import javax.inject.Inject
 
@@ -11,7 +11,7 @@ class CreateTransactionUseCase @Inject constructor(
 
     suspend fun execute(
         request: TransactionRequest
-    ): TransactionResponse? {
+    ): Transaction? {
         return transactionRepository.createTransaction(request)
     }
 

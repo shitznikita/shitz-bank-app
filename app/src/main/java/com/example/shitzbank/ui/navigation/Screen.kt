@@ -48,7 +48,9 @@ sealed class Screen(
         bottomNavigationIcon = BottomNavigationIcon.ExpensesIcon,
         relatedRoutesResIds = listOf(
             R.string.expenses_history_route,
-            R.string.expense_route
+            R.string.expense_route,
+            R.string.expense_old_route,
+            R.string.expense_new_route
         )
     )
 
@@ -62,7 +64,9 @@ sealed class Screen(
         bottomNavigationIcon = BottomNavigationIcon.IncomesIcon,
         relatedRoutesResIds = listOf(
             R.string.incomes_history_route,
-            R.string.income_route
+            R.string.income_route,
+            R.string.income_old_route,
+            R.string.income_new_route
         )
     )
 
@@ -146,6 +150,10 @@ fun getScreen(route: String): Screen {
         "history/true" -> Screen.IncomesHistory // Маршрут для истории доходов
         "transaction/false/" -> Screen.Expense
         "transaction/true/" -> Screen.Income
+        "transaction/false/false" -> Screen.Expense
+        "transaction/false/true" -> Screen.Expense
+        "transaction/true/false" -> Screen.Income
+        "transaction/true/true" -> Screen.Income
         else -> Screen.Expenses // Маршрут по умолчанию
     }
 }

@@ -1,6 +1,7 @@
 package com.example.shitzbank.domain.usecase.transactions
 
 import com.example.shitzbank.domain.model.TransactionRequest
+import com.example.shitzbank.domain.model.TransactionResponse
 import com.example.shitzbank.domain.repository.TransactionRepository
 import javax.inject.Inject
 
@@ -11,8 +12,8 @@ class UpdateTransactionByIdUseCase @Inject constructor(
     suspend fun execute(
         transactionId: Int,
         request: TransactionRequest
-    ) {
-        transactionRepository.updateTransactionById(transactionId, request)
+    ): TransactionResponse? {
+        return transactionRepository.updateTransactionById(transactionId, request)
     }
 
 }

@@ -2,7 +2,6 @@ package com.example.shitzbank.data.dtos
 
 import com.example.shitzbank.common.utils.datetime.parseDateTime
 import com.example.shitzbank.domain.model.TransactionRequest
-import kotlinx.serialization.EncodeDefault
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -11,7 +10,7 @@ data class TransactionRequestDto(
     val categoryId: Int,
     val amount: String,
     val transactionDate: String,
-    @EncodeDefault val comment: String? = null,
+    val comment: String? = null
 ) {
     fun toDomain(): TransactionRequest {
         return TransactionRequest(

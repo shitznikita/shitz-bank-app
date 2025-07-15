@@ -1,5 +1,6 @@
 package com.example.shitzbank.domain.repository
 
+import com.example.shitzbank.domain.model.Transaction
 import com.example.shitzbank.domain.model.TransactionRequest
 import com.example.shitzbank.domain.model.TransactionResponse
 
@@ -29,12 +30,12 @@ interface TransactionRepository {
 
     suspend fun createTransaction(
         request: TransactionRequest
-    ): TransactionResponse?
+    ): Transaction?
 
     suspend fun updateTransactionById(
         transactionId: Int,
         request: TransactionRequest
-    )
+    ): TransactionResponse?
 
     suspend fun getTransactionById(
         transactionId: Int

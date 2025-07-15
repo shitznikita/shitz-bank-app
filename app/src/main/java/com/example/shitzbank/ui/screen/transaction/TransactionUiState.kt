@@ -14,6 +14,5 @@ data class TransactionUiState(
     val time: LocalTime = LocalTime.now(),
     val comment: String? = null,
     val isIncome: Boolean = false,
-    val isNewTransaction: Boolean = false,
-    val showDeleteDialog: Boolean = false
+    val isNewTransaction: Boolean = true
 )

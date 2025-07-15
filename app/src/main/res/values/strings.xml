@@ -10,6 +10,10 @@
     <string name="incomes_history_route">history/true</string>
     <string name="expense_route">transaction/false/</string>
     <string name="income_route">transaction/true/</string>
+    <string name="expense_old_route">transaction/false/false</string>
+    <string name="expense_new_route">transaction/false/true</string>
+    <string name="income_old_route">transaction/true/false</string>
+    <string name="income_new_route">transaction/true/true</string>
     
     <string name="expenses_header">Расходы сегодня</string>
     <string name="expenses_icon">Расходы</string>

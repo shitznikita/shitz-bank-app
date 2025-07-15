@@ -2,10 +2,10 @@ package com.example.shitzbank.data.repository
 
 import com.example.shitzbank.common.CoroutineDispatchers
 import com.example.shitzbank.common.network.retryWithBackoff
-import com.example.shitzbank.common.utils.datetime.toIsoString
 import com.example.shitzbank.common.utils.datetime.toIsoZString
 import com.example.shitzbank.data.dtos.TransactionRequestDto
 import com.example.shitzbank.data.network.ShmrFinanceApi
+import com.example.shitzbank.domain.model.Transaction
 import com.example.shitzbank.domain.model.TransactionRequest
 import com.example.shitzbank.domain.model.TransactionResponse
 import com.example.shitzbank.domain.repository.TransactionRepository
@@ -45,7 +45,7 @@ class TransactionRepositoryImpl
 
         override suspend fun createTransaction(
             request: TransactionRequest
-        ): TransactionResponse? {
+        ): Transaction? {
             return withContext(coroutineDispatchers.io) {
                 try {
                     val requestDto = TransactionRequestDto(
@@ -53,7 +53,7 @@ class TransactionRepositoryImpl
                         categoryId = request.categoryId,
                         amount = String.format(Locale.US, "%.2f", request.amount),
                         transactionDate = request.transactionDate.toIsoZString(),
-                        comment = request.comment
+                        comment = request.comment ?: null
                     )
                     val createdTransactionDto =
                         retryWithBackoff {
@@ -73,8 +73,8 @@ class TransactionRepositoryImpl
         override suspend fun updateTransactionById(
             transactionId: Int,
             request: TransactionRequest
-        ) {
-            withContext(coroutineDispatchers.io) {
+        ): TransactionResponse? {
+            return withContext(coroutineDispatchers.io) {
                 try {
                     val requestDto = TransactionRequestDto(
                         accountId = request.accountId,
@@ -84,12 +84,14 @@ class TransactionRepositoryImpl
                         comment = request.comment
                     )
                     retryWithBackoff {
-                        apiService.updateTransactionById(transactionId, requestDto)
+                        apiService.updateTransactionById(transactionId, requestDto).toDomain()
                     }
                 } catch (e: UnknownHostException) {
                     println("No internet connection or unknown host: ${e.message}")
+                    null
                 } catch (e: IOException) {
                     println("Network error: ${e.message}")
+                    null
                 }
             }
         }

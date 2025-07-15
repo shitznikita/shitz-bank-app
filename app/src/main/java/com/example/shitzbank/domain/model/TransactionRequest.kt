@@ -7,5 +7,5 @@ data class TransactionRequest(
     val categoryId: Int,
     val amount: Double,
     val transactionDate: LocalDateTime,
-    val comment: String?
+    val comment: String? = null
 )

@@ -1,5 +1,6 @@
 package com.example.shitzbank.ui.screen.transaction
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -20,6 +21,7 @@ import com.example.shitzbank.R
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.example.shitzbank.ui.common.composable.ResultStateHandler
 import com.example.shitzbank.ui.screen.transaction.common.DeleteButton
@@ -75,9 +77,18 @@ fun TransactionScreen(
     val editableComment by viewModel.editableComment.collectAsState()
     val showEditCommentDialog by viewModel.showEditCommentDialog.collectAsState()
     val showDeleteConfirmationDialog by viewModel.showDeleteConfirmationDialog.collectAsState()
+    val errorMessage by viewModel.errorMessage.collectAsState()
 
     val sheetState = rememberModalBottomSheetState()
+    val context = LocalContext.current
     val scope = rememberCoroutineScope()
+
+    LaunchedEffect(errorMessage) {
+        errorMessage?.let { message ->
+            Toast.makeText(context, message, Toast.LENGTH_LONG).show()
+            viewModel.clearErrorMessage()
+        }
+    }
 
     LaunchedEffect(currentBottomSheetType) {
         if (currentBottomSheetType != BottomSheetType.NONE) {
