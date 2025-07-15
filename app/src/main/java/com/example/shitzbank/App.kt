@@ -45,6 +45,7 @@ import com.example.shitzbank.ui.navigation.screens
 import com.example.shitzbank.ui.navigation.utils.ActionConfig
 import com.example.shitzbank.ui.navigation.utils.LocalTopAppBarAction
 import com.example.shitzbank.ui.screen.account.AccountScreen
+import com.example.shitzbank.ui.screen.analysis.AnalysisScreen
 import com.example.shitzbank.ui.screen.categories.CategoriesScreen
 import com.example.shitzbank.ui.screen.expenses.ExpensesScreen
 import com.example.shitzbank.ui.screen.history.TransactionsHistoryScreen
@@ -142,6 +143,13 @@ fun App(viewModel: AppViewModel = hiltViewModel()) {
                         }
                     )
                 }
+                composable(
+                    route = "analysis/{isIncome}",
+                    arguments = listOf(navArgument("isIncome") { type = NavType.BoolType })
+                ) {
+                    LaunchedEffect(Unit) { providedTopAppBarAction.value = null }
+                    AnalysisScreen(navController = navController)
+                }
             }
         }
     }
@@ -161,10 +169,18 @@ fun AppTopBar(navController: NavController) {
 
     CenterAlignedTopAppBar(
         colors =
-            TopAppBarDefaults.topAppBarColors(
-                containerColor = MaterialTheme.colorScheme.primary,
-                titleContentColor = MaterialTheme.colorScheme.onPrimary,
-            ),
+            if (currentScreen == Screen.ExpensesAnalysis
+                || currentScreen == Screen.IncomesAnalysis) {
+                TopAppBarDefaults.topAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.background,
+                    titleContentColor = MaterialTheme.colorScheme.onPrimary
+                )
+            } else {
+                TopAppBarDefaults.topAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    titleContentColor = MaterialTheme.colorScheme.onPrimary,
+                )
+            },
         title = {
             CommonText(
                 text = title,

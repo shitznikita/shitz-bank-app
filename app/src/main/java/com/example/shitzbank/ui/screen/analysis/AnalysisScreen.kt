@@ -1,5 +1,6 @@
-package com.example.shitzbank.ui.screen.history
+package com.example.shitzbank.ui.screen.analysis
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -11,15 +12,16 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.shitzbank.ui.common.composable.CommonLazyColumn
 import com.example.shitzbank.ui.common.composable.ResultStateHandler
+import com.example.shitzbank.ui.common.message.NoTransactionMessage
 import com.example.shitzbank.ui.common.picker.EndDatePicker
 import com.example.shitzbank.ui.common.picker.StartDatePicker
-import com.example.shitzbank.ui.screen.history.common.TransactionsHistoryHeader
-import com.example.shitzbank.ui.screen.history.common.TransactionsHistoryItemTemplate
+import com.example.shitzbank.ui.screen.analysis.common.AnalysisHeader
+import com.example.shitzbank.ui.screen.analysis.common.AnalysisItemTemplate
 
 @Composable
-fun TransactionsHistoryScreen(
+fun AnalysisScreen(
     navController: NavController,
-    viewModel: TransactionsHistoryViewModel = hiltViewModel()
+    viewModel: AnalysisViewModel = hiltViewModel()
 ) {
     val transactionsState by viewModel.transactionsState.collectAsState()
     val total by viewModel.total.collectAsState()
@@ -43,9 +45,9 @@ fun TransactionsHistoryScreen(
     ResultStateHandler(
         state = transactionsState,
         onSuccess = { data ->
-            CommonLazyColumn(
-                topItem = {
-                    TransactionsHistoryHeader(
+            if (data.isEmpty()) {
+                Column {
+                    AnalysisHeader(
                         startDate = startDate,
                         onStartDateClick = { showStartDatePicker = true },
                         endDate = endDate,
@@ -53,19 +55,34 @@ fun TransactionsHistoryScreen(
                         total = total,
                         currency = currency
                     )
-                },
-                itemsList = data,
-                itemTemplate = { item ->
-                    TransactionsHistoryItemTemplate(
-                        item = item,
-                        onItemClick = {
-                            val isIncome = it.category.isIncome
-                            val id = it.id
-                            navController.navigate("transaction/$isIncome/$id")
-                        }
-                    )
-                },
-            )
+                    NoTransactionMessage()
+                }
+            } else {
+                CommonLazyColumn(
+                    topItem = {
+                        AnalysisHeader(
+                            startDate = startDate,
+                            onStartDateClick = { showStartDatePicker = true },
+                            endDate = endDate,
+                            onEndDateClick = { showEndDatePicker = true },
+                            total = total,
+                            currency = currency
+                        )
+                    },
+                    itemsList = data,
+                    itemTemplate = { item ->
+                        AnalysisItemTemplate(
+                            item = item,
+                            total = total,
+                            onItemClick = {
+                                val isIncome = it.category.isIncome
+                                val id = it.id
+                                navController.navigate("transaction/$isIncome/$id")
+                            }
+                        )
+                    },
+                )
+            }
         },
     )
 

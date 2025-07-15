@@ -1,4 +1,4 @@
-package com.example.shitzbank.ui.common.composable
+package com.example.shitzbank.ui.common.picker
 
 import androidx.compose.foundation.background
 import androidx.compose.material3.AlertDialog
@@ -7,7 +7,9 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.window.DialogProperties
 import com.example.shitzbank.R
+import com.example.shitzbank.ui.common.composable.CommonText
 
 @Composable
 fun CustomTimePickerDialog(
@@ -18,7 +20,7 @@ fun CustomTimePickerDialog(
     AlertDialog(
         onDismissRequest = onDismiss,
         modifier = Modifier.background(MaterialTheme.colorScheme.secondary),
-        properties = androidx.compose.ui.window.DialogProperties(
+        properties = DialogProperties(
             dismissOnBackPress = true,
             dismissOnClickOutside = true
         ),

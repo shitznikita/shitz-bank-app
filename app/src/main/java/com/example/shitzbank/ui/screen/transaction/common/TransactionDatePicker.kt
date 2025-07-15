@@ -5,7 +5,7 @@ import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import com.example.shitzbank.common.utils.datetime.toEpochDayMillis
 import com.example.shitzbank.common.utils.datetime.toLocalDate
-import com.example.shitzbank.ui.common.composable.CustomDatePicker
+import com.example.shitzbank.ui.common.picker.CustomDatePicker
 import java.time.LocalDate
 
 @OptIn(ExperimentalMaterial3Api::class)

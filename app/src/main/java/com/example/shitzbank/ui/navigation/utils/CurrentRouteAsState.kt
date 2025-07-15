@@ -42,6 +42,10 @@ fun NavController.currentRouteAsState(): String {
             val isNew = navBackStackEntry?.arguments?.getBoolean("isNew")
             "transaction/$isIncome/$isNew"
         }
+        routePattern == "analysis/{isIncome}" -> {
+            val isIncome = navBackStackEntry?.arguments?.getBoolean("isIncome")
+            "analysis/$isIncome"
+        }
         else -> {
             routePattern ?: stringResource(Screen.Expenses.routeResId)
         }
