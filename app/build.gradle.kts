@@ -17,7 +17,7 @@ detekt {
 
 android {
     namespace = "com.example.shitzbank"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.example.shitzbank"
@@ -80,5 +80,11 @@ dependencies {
     implementation(libs.kotlinx.datetime)
     implementation(libs.gson)
     implementation(libs.retrofit.converter.gson)
+    implementation(libs.room.runtime)
+    implementation(libs.room.ktx)
+    implementation(libs.room.paging)
+    kapt(libs.room.compiler)
+    implementation(libs.androidx.work.runtime.ktx)
+    implementation(libs.androidx.hilt.work)
 
 }

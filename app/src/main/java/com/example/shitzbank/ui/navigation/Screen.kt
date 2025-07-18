@@ -50,7 +50,8 @@ sealed class Screen(
             R.string.expenses_history_route,
             R.string.expense_route,
             R.string.expense_old_route,
-            R.string.expense_new_route
+            R.string.expense_new_route,
+            R.string.expenses_analysis_route
         )
     )
 
@@ -66,7 +67,8 @@ sealed class Screen(
             R.string.incomes_history_route,
             R.string.income_route,
             R.string.income_old_route,
-            R.string.income_new_route
+            R.string.income_new_route,
+            R.string.incomes_analysis_route
         )
     )
 
@@ -131,6 +133,19 @@ sealed class Screen(
         action = ActionIcon.IncomeAction,
         backNavigationIcon = BackNavigationIcon.IncomeClose
     )
+
+    data object ExpensesAnalysis : Screen(
+        routeResId = R.string.expenses_analysis_route,
+        titleResId = R.string.analysis_header,
+        backNavigationIcon = BackNavigationIcon.AnalysisBack
+    )
+
+    data object IncomesAnalysis : Screen(
+        routeResId = R.string.incomes_analysis_route,
+        titleResId = R.string.analysis_header,
+        backNavigationIcon = BackNavigationIcon.AnalysisBack
+    )
+
 }
 
 /**
@@ -154,6 +169,8 @@ fun getScreen(route: String): Screen {
         "transaction/false/true" -> Screen.Expense
         "transaction/true/false" -> Screen.Income
         "transaction/true/true" -> Screen.Income
+        "analysis/false" -> Screen.ExpensesAnalysis
+        "analysis/true" -> Screen.IncomesAnalysis
         else -> Screen.Expenses // Маршрут по умолчанию
     }
 }

@@ -3,6 +3,7 @@ package com.example.shitzbank.ui.common.list
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import com.example.shitzbank.common.utils.datetime.formatDate
 import com.example.shitzbank.ui.common.composable.CommonListItem
 import com.example.shitzbank.ui.common.composable.CommonText
@@ -24,10 +25,11 @@ fun DateListItem(
     modifier: Modifier,
     content: String,
     date: LocalDate,
+    backgroundColor: Color = MaterialTheme.colorScheme.secondary
 ) {
     CommonListItem(
         modifier = modifier,
-        backgroundColor = MaterialTheme.colorScheme.secondary,
+        backgroundColor = backgroundColor,
         content = {
             CommonText(
                 text = content,

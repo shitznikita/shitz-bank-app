@@ -14,6 +14,8 @@
     <string name="expense_new_route">transaction/false/true</string>
     <string name="income_old_route">transaction/true/false</string>
     <string name="income_new_route">transaction/true/true</string>
+    <string name="expenses_analysis_route">analysis/false</string>
+    <string name="incomes_analysis_route">analysis/true</string>
     
     <string name="expenses_header">Расходы сегодня</string>
     <string name="expenses_icon">Расходы</string>
@@ -28,6 +30,7 @@
     <string name="history_header">Моя история</string>
     <string name="expense_header">Мои расходы</string>
     <string name="income_header">Мои доходы</string>
+    <string name="analysis_header">Анализ</string>
 
     <string name="settings_dark_theme">Тёмная тема</string>
     <string name="settings_main_color">Основной цвет</string>
@@ -62,4 +65,5 @@
     <string name="delete_transaction_title">Подтверждение удаления</string>
     <string name="delete_transaction_message">Удалить транзакцию?</string>
     <string name="delete_transaction_yes">Удалить</string>
+    <string name="no_transactions_for_period">Отсутствуют транзакции за выбранный период</string>
 </resources>

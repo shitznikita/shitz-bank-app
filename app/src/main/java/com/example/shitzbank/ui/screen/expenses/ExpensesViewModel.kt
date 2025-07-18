@@ -5,6 +5,7 @@ import com.example.shitzbank.common.ResultState
 import com.example.shitzbank.common.network.ConnectionStatus
 import com.example.shitzbank.common.network.NetworkMonitor
 import com.example.shitzbank.common.network.NetworkMonitorViewModel
+import com.example.shitzbank.common.utils.datetime.toIsoZString
 import com.example.shitzbank.domain.model.TransactionResponse
 import com.example.shitzbank.domain.usecase.account.GetDefaultAccountUseCase
 import com.example.shitzbank.domain.usecase.transactions.GetExpensesUseCase
@@ -14,6 +15,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
@@ -37,19 +39,20 @@ class ExpensesViewModel
 
         init {
             viewModelScope.launch {
-                networkStatus.collect { status ->
-                    if (status is ConnectionStatus.Available) {
-                        loadExpenses()
-                    }
-                }
+//                networkStatus.collect { status ->
+//                    if (status is ConnectionStatus.Available) {
+//                        loadExpenses()
+//                    }
+//                }
+                loadExpenses()
             }
         }
 
         fun loadExpenses() {
             viewModelScope.launch {
-                if (networkStatus.value is ConnectionStatus.Unavailable) {
-                    return@launch
-                }
+//                if (networkStatus.value is ConnectionStatus.Unavailable) {
+//                    return@launch
+//                }
 
                 _expensesState.value = ResultState.Loading
                 _totalExpense.value = DEFAULT_TOTAL_VALUE

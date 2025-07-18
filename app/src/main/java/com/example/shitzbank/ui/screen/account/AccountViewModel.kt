@@ -39,19 +39,20 @@ class AccountViewModel
 
         init {
             viewModelScope.launch {
-                networkStatus.collect { status ->
-                    if (status is ConnectionStatus.Available) {
-                        loadAccount()
-                    }
-                }
+//                networkStatus.collect { status ->
+//                    if (status is ConnectionStatus.Available) {
+//                        loadAccount()
+//                    }
+//                }
+                loadAccount()
             }
         }
 
         fun loadAccount() {
             viewModelScope.launch {
-                if (networkStatus.value is ConnectionStatus.Unavailable) {
-                    return@launch
-                }
+//                if (networkStatus.value is ConnectionStatus.Unavailable) {
+//                    return@launch
+//                }
 
                 _accountState.value = ResultState.Loading
 
@@ -75,9 +76,9 @@ class AccountViewModel
         fun saveNameChanges() {
             currentEditableAccount?.let { account ->
                 viewModelScope.launch {
-                    if (networkStatus.value is ConnectionStatus.Unavailable) {
-                        return@launch
-                    }
+//                    if (networkStatus.value is ConnectionStatus.Unavailable) {
+//                        return@launch
+//                    }
 
                     val editAccount = updateAccountByIdUseCase.execute(
                         id = account.id,
@@ -95,9 +96,9 @@ class AccountViewModel
         fun saveCurrencyChanges(newCurrencyCode: String) {
             currentEditableAccount?.let { account ->
                 viewModelScope.launch {
-                    if (networkStatus.value is ConnectionStatus.Unavailable) {
-                        return@launch
-                    }
+//                    if (networkStatus.value is ConnectionStatus.Unavailable) {
+//                        return@launch
+//                    }
 
                     val editAccount = updateAccountByIdUseCase.execute(
                         id = account.id,

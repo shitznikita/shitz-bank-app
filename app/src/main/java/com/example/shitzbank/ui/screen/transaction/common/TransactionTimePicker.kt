@@ -7,7 +7,7 @@ import androidx.compose.material3.TimePickerDefaults
 import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.runtime.Composable
 import java.time.LocalTime
-import com.example.shitzbank.ui.common.composable.CustomTimePickerDialog
+import com.example.shitzbank.ui.common.picker.CustomTimePickerDialog
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

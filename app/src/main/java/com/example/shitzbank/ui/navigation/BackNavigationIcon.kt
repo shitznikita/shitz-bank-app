@@ -42,4 +42,8 @@ sealed class BackNavigationIcon(
     data object IncomeClose : BackNavigationIcon(
         iconResId = R.drawable.ic_cross
     )
+
+    data object AnalysisBack : BackNavigationIcon(
+        iconResId = R.drawable.ic_back
+    )
 }

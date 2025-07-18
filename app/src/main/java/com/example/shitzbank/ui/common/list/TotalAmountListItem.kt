@@ -2,6 +2,7 @@ package com.example.shitzbank.ui.common.list
 
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import com.example.shitzbank.R
 import com.example.shitzbank.ui.common.composable.CommonListItem
@@ -20,10 +21,11 @@ import com.example.shitzbank.ui.common.composable.PriceDisplay
 @Composable
 fun TotalAmountListItem(
     totalAmount: Double,
-    currency: String
+    currency: String,
+    backgroundColor: Color = MaterialTheme.colorScheme.secondary
 ) {
     CommonListItem(
-        backgroundColor = MaterialTheme.colorScheme.secondary,
+        backgroundColor = backgroundColor,
         content = {
             CommonText(
                 text = stringResource(R.string.in_total),

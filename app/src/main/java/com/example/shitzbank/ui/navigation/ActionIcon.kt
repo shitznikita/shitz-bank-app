@@ -59,7 +59,7 @@ sealed class ActionIcon(
      */
     data object ExpensesHistoryAction : ActionIcon(
         iconResId = R.drawable.ic_transaction_history,
-        routeResId = R.string.expenses_history_route // TODO: заглушка, в будущем будет переносить на другой экран
+        routeResId = R.string.expenses_analysis_route
     )
 
     /**
@@ -67,7 +67,7 @@ sealed class ActionIcon(
      */
     data object IncomesHistoryAction : ActionIcon(
         iconResId = R.drawable.ic_transaction_history,
-        routeResId = R.string.incomes_history_route // TODO: заглушка, в будущем будет переносить на другой экран
+        routeResId = R.string.incomes_analysis_route
     )
 
     data object ExpenseAction : ActionIcon(
