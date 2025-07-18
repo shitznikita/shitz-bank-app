@@ -1,6 +1,7 @@
 package com.example.shitzbank.data.dtos
 
 import com.example.shitzbank.common.utils.datetime.parseDateTime
+import com.example.shitzbank.data.local.entity.AccountEntity
 import com.example.shitzbank.domain.model.Account
 import kotlinx.serialization.Serializable
 
@@ -23,6 +24,18 @@ data class AccountDto(
             currency = this.currency,
             createdAt = parseDateTime(this.createdAt),
             updatedAt = parseDateTime(this.updatedAt),
+        )
+    }
+
+    fun toEntity(): AccountEntity {
+        return AccountEntity(
+            id = this.id,
+            userId = this.userId,
+            name = this.name,
+            balance = this.balance,
+            currency = this.currency,
+            createdAt = this.createdAt,
+            updatedAt = this.updatedAt
         )
     }
 }

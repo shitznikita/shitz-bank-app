@@ -81,19 +81,20 @@ class TransactionViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            networkStatus.collect { status ->
-                if (status is ConnectionStatus.Available) {
-                    loadData()
-                }
-            }
+//            networkStatus.collect { status ->
+//                if (status is ConnectionStatus.Available) {
+//                    loadData()
+//                }
+//            }
+            loadData()
         }
     }
 
     private fun loadData() {
         viewModelScope.launch {
-            if (networkStatus.value is ConnectionStatus.Unavailable) {
-                return@launch
-            }
+//            if (networkStatus.value is ConnectionStatus.Unavailable) {
+//                return@launch
+//            }
 
             val accountsLoad = async { loadAccounts() }
             val categoriesLoad = async { loadCategories() }

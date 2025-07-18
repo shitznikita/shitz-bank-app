@@ -40,11 +40,12 @@ class CategoriesViewModel
 
         init {
             viewModelScope.launch {
-                networkStatus.collect { status ->
-                    if (status is ConnectionStatus.Available) {
-                        loadCategories()
-                    }
-                }
+//                networkStatus.collect { status ->
+//                    if (status is ConnectionStatus.Available) {
+//                        loadCategories()
+//                    }
+//                }
+                loadCategories()
             }
 
             _searchQuery
@@ -58,9 +59,9 @@ class CategoriesViewModel
 
         fun loadCategories() {
             viewModelScope.launch {
-                if (networkStatus.value is ConnectionStatus.Unavailable) {
-                    return@launch
-                }
+//                if (networkStatus.value is ConnectionStatus.Unavailable) {
+//                    return@launch
+//                }
 
                 _categoriesState.value = ResultState.Loading
 

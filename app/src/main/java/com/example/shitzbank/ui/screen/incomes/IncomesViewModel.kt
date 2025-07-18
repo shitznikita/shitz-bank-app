@@ -37,19 +37,20 @@ class IncomesViewModel
 
         init {
             viewModelScope.launch {
-                networkStatus.collect { status ->
-                    if (status is ConnectionStatus.Available) {
-                        loadIncomes()
-                    }
-                }
+//                networkStatus.collect { status ->
+//                    if (status is ConnectionStatus.Available) {
+//                        loadIncomes()
+//                    }
+//                }
+                loadIncomes()
             }
         }
 
         fun loadIncomes() {
             viewModelScope.launch {
-                if (networkStatus.value is ConnectionStatus.Unavailable) {
-                    return@launch
-                }
+//                if (networkStatus.value is ConnectionStatus.Unavailable) {
+//                    return@launch
+//                }
 
                 _incomesState.value = ResultState.Loading
                 _totalIncome.value = DEFAULT_TOTAL_VALUE

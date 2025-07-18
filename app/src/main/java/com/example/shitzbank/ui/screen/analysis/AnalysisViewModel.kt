@@ -50,11 +50,12 @@ constructor(
 
     init {
         viewModelScope.launch {
-            networkStatus.collect { status ->
-                if (status is ConnectionStatus.Available) {
-                    loadTransactions()
-                }
-            }
+//            networkStatus.collect { status ->
+//                if (status is ConnectionStatus.Available) {
+//                    loadTransactions()
+//                }
+//            }
+            loadTransactions()
         }
     }
 
@@ -70,9 +71,9 @@ constructor(
 
     fun loadTransactions() {
         viewModelScope.launch {
-            if (networkStatus.value is ConnectionStatus.Unavailable) {
-                return@launch
-            }
+//            if (networkStatus.value is ConnectionStatus.Unavailable) {
+//                return@launch
+//            }
 
             _transactionsState.value = ResultState.Loading
             _total.value = DEFAULT_TOTAL_VALUE
