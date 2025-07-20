@@ -30,7 +30,7 @@ data class TransactionEntity(
     val comment: String?,
     val createdAt: String,
     val updatedAt: String,
-    val isSync: Boolean = false
+    val isPendingSync: Boolean = true
 ) {
     fun toDomain(): Transaction {
         return Transaction(

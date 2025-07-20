@@ -23,7 +23,7 @@ fun AnalysisScreen(
     navController: NavController,
     viewModel: AnalysisViewModel = hiltViewModel()
 ) {
-    val transactionsState by viewModel.transactionsState.collectAsState()
+    val transactionsState by viewModel.categorySummaries.collectAsState()
     val total by viewModel.total.collectAsState()
     val startDate by viewModel.startDate.collectAsState()
     val endDate by viewModel.endDate.collectAsState()
@@ -74,11 +74,7 @@ fun AnalysisScreen(
                         AnalysisItemTemplate(
                             item = item,
                             total = total,
-                            onItemClick = {
-                                val isIncome = it.category.isIncome
-                                val id = it.id
-                                navController.navigate("transaction/$isIncome/$id")
-                            }
+                            currency = currency
                         )
                     },
                 )

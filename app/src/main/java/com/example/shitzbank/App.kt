@@ -1,5 +1,6 @@
 package com.example.shitzbank
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
@@ -21,9 +22,11 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -37,6 +40,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.shitzbank.common.network.ConnectionStatus
+import com.example.shitzbank.common.utils.datetime.formatDateTime
 import com.example.shitzbank.ui.common.composable.CommonText
 import com.example.shitzbank.ui.navigation.Screen
 import com.example.shitzbank.ui.navigation.utils.currentRouteAsState
@@ -157,7 +161,10 @@ fun App(viewModel: AppViewModel = hiltViewModel()) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AppTopBar(navController: NavController) {
+fun AppTopBar(
+    navController: NavController,
+    viewModel: AppViewModel = hiltViewModel()
+) {
     val currentDestination = navController.currentRouteAsState()
 
     val currentScreen = getScreen(currentDestination)
@@ -166,6 +173,8 @@ fun AppTopBar(navController: NavController) {
     val defaultAction = currentScreen.action
     val customAction = LocalTopAppBarAction.current
     val backNavigation = currentScreen.backNavigationIcon
+
+    val lastSync by viewModel.lastSyncTime.collectAsState()
 
     CenterAlignedTopAppBar(
         colors =
@@ -182,11 +191,20 @@ fun AppTopBar(navController: NavController) {
                 )
             },
         title = {
-            CommonText(
-                text = title,
-                color = MaterialTheme.colorScheme.onPrimary,
-                style = MaterialTheme.typography.titleLarge,
-            )
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                CommonText(
+                    text = title,
+                    color = MaterialTheme.colorScheme.onPrimary,
+                    style = MaterialTheme.typography.titleLarge,
+                )
+                CommonText(
+                    text = formatDateTime(lastSync),
+                    color = MaterialTheme.colorScheme.onSecondary,
+                    style = MaterialTheme.typography.titleSmall
+                )
+            }
         },
         navigationIcon = {
             if (backNavigation != null) {

@@ -39,7 +39,7 @@ data class TransactionDto(
             comment = this.comment,
             createdAt = this.createdAt,
             updatedAt = this.updatedAt,
-            isSync = false
+            isPendingSync = false
         )
     }
 }

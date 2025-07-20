@@ -3,7 +3,6 @@ package com.example.shitzbank.ui.screen.analysis
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.example.shitzbank.common.ResultState
-import com.example.shitzbank.common.network.ConnectionStatus
 import com.example.shitzbank.common.network.NetworkMonitor
 import com.example.shitzbank.common.network.NetworkMonitorViewModel
 import com.example.shitzbank.domain.model.TransactionResponse
@@ -18,10 +17,14 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
+data class CategorySummary(
+    val categoryName: String,
+    val categoryEmoji: String,
+    val totalAmount: Double
+)
+
 @HiltViewModel
-class AnalysisViewModel
-@Inject
-constructor(
+class AnalysisViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val getDefaultAccountUseCase: GetDefaultAccountUseCase,
     private val getTransactionsUseCase: GetTransactionsUseCase,
@@ -42,6 +45,9 @@ constructor(
     private val _total = MutableStateFlow(DEFAULT_TOTAL_VALUE)
     val total = _total.asStateFlow()
 
+    private val _categorySummaries = MutableStateFlow<ResultState<List<CategorySummary>>>(ResultState.Loading)
+    val categorySummaries: StateFlow<ResultState<List<CategorySummary>>> = _categorySummaries.asStateFlow()
+
     private val _accountCurrency = MutableStateFlow("")
     val accountCurrency: StateFlow<String> = _accountCurrency.asStateFlow()
 
@@ -50,11 +56,6 @@ constructor(
 
     init {
         viewModelScope.launch {
-//            networkStatus.collect { status ->
-//                if (status is ConnectionStatus.Available) {
-//                    loadTransactions()
-//                }
-//            }
             loadTransactions()
         }
     }
@@ -71,12 +72,9 @@ constructor(
 
     fun loadTransactions() {
         viewModelScope.launch {
-//            if (networkStatus.value is ConnectionStatus.Unavailable) {
-//                return@launch
-//            }
-
             _transactionsState.value = ResultState.Loading
             _total.value = DEFAULT_TOTAL_VALUE
+            _categorySummaries.value = ResultState.Loading
 
             val account = getDefaultAccountUseCase.execute()
 
@@ -94,14 +92,35 @@ constructor(
 
             if (transactions.isEmpty()) {
                 _total.value = 0.0
+                _categorySummaries.value = ResultState.Loading
             } else {
-                calculateTotalExpense(transactions)
+                calculateTotalAndCategorySums(transactions)
             }
         }
     }
 
-    private fun calculateTotalExpense(expenses: List<TransactionResponse>) {
-        val sum = expenses.sumOf { it.amount }
-        _total.value = sum
+    private fun calculateTotalAndCategorySums(
+        transactions: List<TransactionResponse>
+    ) {
+        val totalSum = transactions.sumOf { it.amount }
+        _total.value = totalSum
+
+        val categoryMap = transactions.groupBy { it.category.id }
+            .mapValues { (_, transactionsInGroup) ->
+                transactionsInGroup.sumOf { it.amount }
+            }
+
+        val summaries = categoryMap.mapNotNull { (categoryId, totalAmount) ->
+            val categoryInfo = transactions.firstOrNull { it.category.id == categoryId }?.category
+            categoryInfo?.let {
+                CategorySummary(
+                    categoryName = it.name,
+                    categoryEmoji = it.emoji,
+                    totalAmount = totalAmount
+                )
+            }
+        }.sortedByDescending { it.totalAmount }
+
+        _categorySummaries.value = ResultState.Success(summaries)
     }
 }
