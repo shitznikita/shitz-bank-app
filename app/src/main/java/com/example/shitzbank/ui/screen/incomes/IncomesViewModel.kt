@@ -2,7 +2,6 @@ package com.example.shitzbank.ui.screen.incomes
 
 import androidx.lifecycle.viewModelScope
 import com.example.shitzbank.common.ResultState
-import com.example.shitzbank.common.network.ConnectionStatus
 import com.example.shitzbank.common.network.NetworkMonitor
 import com.example.shitzbank.common.network.NetworkMonitorViewModel
 import com.example.shitzbank.domain.model.TransactionResponse
@@ -18,64 +17,53 @@ import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
 @HiltViewModel
-class IncomesViewModel
-    @Inject
-    constructor(
-        private val getDefaultAccountUseCase: GetDefaultAccountUseCase,
-        private val getIncomesUseCase: GetIncomesUseCase,
-        networkMonitor: NetworkMonitor,
-    ) : NetworkMonitorViewModel(networkMonitor) {
-        private val _incomesState = MutableStateFlow<ResultState<List<TransactionResponse>>>(ResultState.Loading)
-        val incomesState: StateFlow<ResultState<List<TransactionResponse>>> = _incomesState.asStateFlow()
+class IncomesViewModel @Inject constructor(
+    private val getDefaultAccountUseCase: GetDefaultAccountUseCase,
+    private val getIncomesUseCase: GetIncomesUseCase,
+    networkMonitor: NetworkMonitor,
+) : NetworkMonitorViewModel(networkMonitor) {
+    private val _incomesState = MutableStateFlow<ResultState<List<TransactionResponse>>>(ResultState.Loading)
+    val incomesState: StateFlow<ResultState<List<TransactionResponse>>> = _incomesState.asStateFlow()
 
-        private val DEFAULT_TOTAL_VALUE = 0.0
-        private val _totalIncome = MutableStateFlow(DEFAULT_TOTAL_VALUE)
-        val totalIncome: StateFlow<Double> = _totalIncome.asStateFlow()
+    private val DEFAULT_TOTAL_VALUE = 0.0
+    private val _totalIncome = MutableStateFlow(DEFAULT_TOTAL_VALUE)
+    val totalIncome: StateFlow<Double> = _totalIncome.asStateFlow()
 
-        private val _accountCurrency = MutableStateFlow("")
-        val accountCurrency: StateFlow<String> = _accountCurrency.asStateFlow()
+    private val _accountCurrency = MutableStateFlow("")
+    val accountCurrency: StateFlow<String> = _accountCurrency.asStateFlow()
 
-        init {
-            viewModelScope.launch {
-//                networkStatus.collect { status ->
-//                    if (status is ConnectionStatus.Available) {
-//                        loadIncomes()
-//                    }
-//                }
-                loadIncomes()
-            }
-        }
-
-        fun loadIncomes() {
-            viewModelScope.launch {
-//                if (networkStatus.value is ConnectionStatus.Unavailable) {
-//                    return@launch
-//                }
-
-                _incomesState.value = ResultState.Loading
-                _totalIncome.value = DEFAULT_TOTAL_VALUE
-
-                val apiFormatter = DateTimeFormatter.ISO_LOCAL_DATE
-                val startDateString = LocalDate.now().format(apiFormatter)
-                val endDateString = LocalDate.now().format(apiFormatter)
-
-                val account = getDefaultAccountUseCase.execute()
-
-                _accountCurrency.value = account.currency
-
-                val incomes = getIncomesUseCase.execute(account.id, startDateString, endDateString)
-                _incomesState.value = ResultState.Success(incomes)
-
-                if (incomes.isEmpty()) {
-                    _totalIncome.value = 0.0
-                } else {
-                    calculateTotalIncome(incomes)
-                }
-            }
-        }
-
-        private fun calculateTotalIncome(expenses: List<TransactionResponse>) {
-            val sum = expenses.sumOf { it.amount }
-            _totalIncome.value = sum
+    init {
+        viewModelScope.launch {
+            loadIncomes()
         }
     }
+
+    fun loadIncomes() {
+        viewModelScope.launch {
+            _incomesState.value = ResultState.Loading
+            _totalIncome.value = DEFAULT_TOTAL_VALUE
+
+            val apiFormatter = DateTimeFormatter.ISO_LOCAL_DATE
+            val startDateString = LocalDate.now().format(apiFormatter)
+            val endDateString = LocalDate.now().format(apiFormatter)
+
+            val account = getDefaultAccountUseCase.execute()
+
+            _accountCurrency.value = account.currency
+
+            val incomes = getIncomesUseCase.execute(account.id, startDateString, endDateString)
+            _incomesState.value = ResultState.Success(incomes)
+
+            if (incomes.isEmpty()) {
+                _totalIncome.value = 0.0
+            } else {
+                calculateTotalIncome(incomes)
+            }
+        }
+    }
+
+    private fun calculateTotalIncome(expenses: List<TransactionResponse>) {
+        val sum = expenses.sumOf { it.amount }
+        _totalIncome.value = sum
+    }
+}

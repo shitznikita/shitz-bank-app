@@ -3,7 +3,6 @@ package com.example.shitzbank.ui.screen.transaction
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.example.shitzbank.common.ResultState
-import com.example.shitzbank.common.network.ConnectionStatus
 import com.example.shitzbank.common.network.NetworkMonitor
 import com.example.shitzbank.common.network.NetworkMonitorViewModel
 import com.example.shitzbank.domain.model.Account
@@ -81,21 +80,12 @@ class TransactionViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-//            networkStatus.collect { status ->
-//                if (status is ConnectionStatus.Available) {
-//                    loadData()
-//                }
-//            }
             loadData()
         }
     }
 
     private fun loadData() {
         viewModelScope.launch {
-//            if (networkStatus.value is ConnectionStatus.Unavailable) {
-//                return@launch
-//            }
-
             val accountsLoad = async { loadAccounts() }
             val categoriesLoad = async { loadCategories() }
             accountsLoad.await()
@@ -291,7 +281,7 @@ class TransactionViewModel @Inject constructor(
             val request = TransactionRequest(
                 accountId = currentTransactionData.account!!.id,
                 categoryId = currentTransactionData.category!!.id,
-                amount = currentTransactionData.amount!!.replace(',', '.').toDouble(),
+                amount = currentTransactionData.amount.replace(',', '.').toDouble(),
                 transactionDate = LocalDateTime.of(
                     currentTransactionData.date,
                     currentTransactionData.time

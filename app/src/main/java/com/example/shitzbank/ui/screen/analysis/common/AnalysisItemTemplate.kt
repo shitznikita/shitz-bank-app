@@ -11,15 +11,16 @@ import com.example.shitzbank.ui.common.composable.CommonListItem
 import com.example.shitzbank.ui.common.composable.CommonText
 import com.example.shitzbank.ui.common.composable.LeadIcon
 import com.example.shitzbank.ui.common.trail.PercentageTrailingContent
+import com.example.shitzbank.ui.screen.analysis.CategorySummary
 
 @Composable
 fun AnalysisItemTemplate(
-    item: TransactionResponse,
-    total: Double,
-    onItemClick: (TransactionResponse) -> Unit
+    item: CategorySummary,
+    currency: String,
+    total: Double
 ) {
     val percentage = if (total != 0.0) {
-        (item.amount / total * 100).let {
+        (item.totalAmount/ total * 100).let {
             "%.1f%%".format(it)
         }
     } else {
@@ -27,40 +28,26 @@ fun AnalysisItemTemplate(
     }
 
     CommonListItem(
-        modifier = Modifier.clickable {
-            onItemClick(item)
-        }
+        modifier = Modifier.clickable {}
             .height(68.dp),
         lead = {
             LeadIcon(
-                label = item.category.emoji,
+                label = item.categoryEmoji,
                 backgroundColor = MaterialTheme.colorScheme.secondary,
             )
         },
         content = {
             CommonText(
-                text = item.category.name,
+                text = item.categoryName,
                 style = MaterialTheme.typography.bodyLarge,
                 color = MaterialTheme.colorScheme.onPrimary,
             )
         },
-        supportingContent =
-            if (item.comment != null) {
-                {
-                    CommonText(
-                        text = item.comment,
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSecondary,
-                    )
-                }
-            } else {
-                null
-            },
         trail = {
             PercentageTrailingContent(
-                amount = item.amount,
+                amount = item.totalAmount,
                 percentage = percentage,
-                currency = item.account.currency
+                currency = currency
             )
         },
     )
