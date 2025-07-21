@@ -74,9 +74,7 @@ class AppViewModel @Inject constructor(
     private fun syncPendingTransactions() {
         viewModelScope.launch {
             val syncedTransactions = transactionRepositoryImpl.syncPendingTransactions()
-            if (syncedTransactions.isNotEmpty()) {
-                _lastSyncTime.value = syncDataManager.getLastSyncTime()
-            }
+            _lastSyncTime.value = syncDataManager.getLastSyncTime()
         }
     }
 }

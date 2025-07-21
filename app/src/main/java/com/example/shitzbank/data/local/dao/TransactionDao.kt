@@ -90,7 +90,7 @@ interface TransactionDao {
      * Принимает ID, AccountDao и CategoryDao для получения связанных объектов.
      * Возвращает доменную модель TransactionResponse или null.
      */
-    @Query("SELECT * FROM transactions WHERE id = :transactionId")
+    @Query("SELECT * FROM transactions WHERE id = :transactionId AND isDeleted = 0")
     suspend fun getTransactionById(
         transactionId: Int,
         accountDao: AccountDao,
@@ -142,7 +142,7 @@ interface TransactionDao {
      * Принимает ID счета, startDate, endDate.
      * Возвращает список доменных моделей TransactionResponse.
      */
-    @Query("SELECT * FROM transactions WHERE accountId = :accountId AND transactionDate BETWEEN :startDate AND :endDate")
+    @Query("SELECT * FROM transactions WHERE accountId = :accountId AND transactionDate BETWEEN :startDate AND :endDate AND isDeleted = 0")
     suspend fun getTransactionsForPeriod(
         accountId: Int,
         startDate: String,
@@ -160,13 +160,21 @@ interface TransactionDao {
     /**
      * Вспомогательный приватный метод для Room, возвращает List<TransactionEntity>
      */
-    @Query("SELECT * FROM transactions WHERE accountId = :accountId AND transactionDate BETWEEN :startDate AND :endDate")
+    @Query("SELECT * FROM transactions WHERE accountId = :accountId AND transactionDate BETWEEN :startDate AND :endDate AND isDeleted = 0")
     suspend fun getTransactionEntitiesForPeriod(
         accountId: Int,
         startDate: String,
         endDate: String
     ): List<TransactionEntity>
 
+
+    /**
+     * **Мягкое удаление**: Помечает транзакцию как удаленную и ожидающую синхронизации.
+     * Принимает ID транзакции.
+     * @return Количество измененных строк.
+     */
+    @Query("UPDATE transactions SET isDeleted = 1, isPendingSync = 1 WHERE id = :transactionId")
+    suspend fun markTransactionAsDeleted(transactionId: Int): Int
 
     /**
      * Удаляет транзакцию по ее ID.

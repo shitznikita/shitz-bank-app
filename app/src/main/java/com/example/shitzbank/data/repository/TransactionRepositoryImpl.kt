@@ -141,12 +141,13 @@ class TransactionRepositoryImpl @Inject constructor(
         transactionId: Int
     ): Boolean {
         return withContext(coroutineDispatchers.io) {
-            val rowsDeleted = transactionDao.deleteTransactionById(transactionId)
+            transactionDao.markTransactionAsDeleted(transactionId)
             if (isNetworkAvailable()) {
                 val isSuccessful = retryWithBackoff {
                     apiService.deleteTransactionById(transactionId).isSuccessful
                 }
                 if (isSuccessful) {
+                    transactionDao.deleteTransactionById(transactionId)
                     return@withContext true
                 } else {
                     return@withContext true
@@ -159,37 +160,57 @@ class TransactionRepositoryImpl @Inject constructor(
 
     suspend fun syncPendingTransactions(): List<Transaction> {
         return withContext(coroutineDispatchers.io) {
-            val pendingTransactions = transactionDao.getPendingSyncTransactions()
+            val pendingTransactions = transactionDao.getPendingSyncTransactionEntities()
             val successfullySynced = mutableListOf<Transaction>()
+            val transactionsToPermanentlyDeleteIds = mutableListOf<Int>()
 
             if (!isNetworkAvailable()) {
                 return@withContext emptyList()
             }
 
             for (transaction in pendingTransactions) {
-                val requestDto = TransactionRequestDto(
-                    accountId = transaction.accountId,
-                    categoryId = transaction.categoryId,
-                    amount = String.format(Locale.US, "%.2f", transaction.amount),
-                    transactionDate = transaction.transactionDate.toIsoZString(),
-                    comment = transaction.comment
-                )
-
-                if (transaction.id < 0) {
-                    val createdDto = retryWithBackoff { apiService.createTransaction(requestDto) }
-                    val remoteTransaction = createdDto
-                    transactionDao.deleteTransactionById(transaction.id)
-                    transactionDao.insertTransactionEntity(remoteTransaction.toEntity())
-                    successfullySynced.add(remoteTransaction.toDomain())
+                if (transaction.isDeleted) {
+                    val isSuccesfull = retryWithBackoff {
+                        apiService.deleteTransactionById(transaction.id).isSuccessful
+                    }
+                    if (isSuccesfull) {
+                        transactionsToPermanentlyDeleteIds.add(transaction.id)
+                    }
                 } else {
-                    val updatedDto = retryWithBackoff { apiService.updateTransactionById(transaction.id, requestDto) }
-                    val remoteTransaction = updatedDto
-                    transactionDao.updateTransactionSyncStatus(transaction.id, false)
-                    successfullySynced.add(remoteTransaction.toTransactionDomain())
+                    val requestDto = TransactionRequestDto(
+                        accountId = transaction.accountId,
+                        categoryId = transaction.categoryId,
+                        amount = String.format(Locale.US, "%.2f", transaction.amount),
+                        transactionDate = transaction.transactionDate,
+                        comment = transaction.comment
+                    )
+
+                    if (transaction.id < 0) {
+                        val createdDto =
+                            retryWithBackoff { apiService.createTransaction(requestDto) }
+                        val remoteTransaction = createdDto
+                        transactionDao.deleteTransactionById(transaction.id)
+                        transactionDao.insertTransactionEntity(remoteTransaction.toEntity())
+                        successfullySynced.add(remoteTransaction.toDomain())
+                    } else {
+                        val updatedDto = retryWithBackoff {
+                            apiService.updateTransactionById(
+                                transaction.id,
+                                requestDto
+                            )
+                        }
+                        val remoteTransaction = updatedDto
+                        transactionDao.updateTransactionSyncStatus(transaction.id, false)
+                        successfullySynced.add(remoteTransaction.toTransactionDomain())
+                    }
                 }
             }
 
-            if (successfullySynced.isNotEmpty()) {
+            transactionsToPermanentlyDeleteIds.forEach { id ->
+                transactionDao.deleteTransactionById(id)
+            }
+
+            if (successfullySynced.isNotEmpty() || transactionsToPermanentlyDeleteIds.isNotEmpty()) {
                 syncDataManager.saveLastSyncTime(LocalDateTime.now())
             }
 
